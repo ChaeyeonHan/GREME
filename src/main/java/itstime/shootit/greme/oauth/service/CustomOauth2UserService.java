@@ -2,6 +2,8 @@ package itstime.shootit.greme.oauth.service;
 
 import itstime.shootit.greme.oauth.dto.OAuth2Attributes;
 import itstime.shootit.greme.user.domain.User;
+import itstime.shootit.greme.user.ui.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -13,8 +15,11 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 //로그인 성공 시 실행되는 메소드
+@RequiredArgsConstructor
 @Service
 public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+
+    private final UserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -48,11 +53,12 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
         String nickName=(String)profile.get("nickname");
         String email=(String)profile.get("email");
 
-        User user= User.builder()
-                .nickName(nickName)
+        User userEntity = User.builder()
                 .email(email)
                 .build();
-        System.out.println("success: "+user.toString());
+        System.out.println("success: "+ userEntity.toString());
+
+        userRepository.save(userEntity);
         //UserRepository 만들어서 save하면 됨.
     }
 }
