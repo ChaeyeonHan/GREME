@@ -1,7 +1,7 @@
 package itstime.shootit.greme.config;
 
 import itstime.shootit.greme.oauth.handler.OAuth2SuccessHandler;
-import itstime.shootit.greme.oauth.service.CustomOauth2UserService;
+import itstime.shootit.greme.oauth.application.CustomOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

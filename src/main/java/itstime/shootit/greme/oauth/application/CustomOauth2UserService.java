@@ -1,4 +1,4 @@
-package itstime.shootit.greme.oauth.service;
+package itstime.shootit.greme.oauth.application;
 
 import itstime.shootit.greme.oauth.dto.OAuth2Attributes;
 import itstime.shootit.greme.user.domain.User;

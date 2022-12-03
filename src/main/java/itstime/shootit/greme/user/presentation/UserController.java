@@ -1,4 +1,4 @@
-package itstime.shootit.greme.user.controller;
+package itstime.shootit.greme.user.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
