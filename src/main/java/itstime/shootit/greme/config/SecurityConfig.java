@@ -18,6 +18,7 @@ public class SecurityConfig {
     private final CustomOauth2UserService customOauth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -25,26 +26,26 @@ public class SecurityConfig {
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                    .cors()
+                .cors()
                 .and()
-                    .csrf().disable()
+                .csrf().disable()
                 .authorizeHttpRequests()
-                    .antMatchers("/oauth2/login/**").permitAll()
-                    .anyRequest().authenticated()
+                .antMatchers("/oauth2/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                    .formLogin().disable()
+                .formLogin().disable()
                 .oauth2Login()
-                    .userInfoEndpoint()
-                        .userService(customOauth2UserService)
+                .userInfoEndpoint()
+                .userService(customOauth2UserService)
                 .and()
-                    //.defaultSuccessUrl("/oauth2-authroization-kakao") //로그인 실패 시
-                    .successHandler(oAuth2SuccessHandler); //로그인 성공 시
+//                .defaultSuccessUrl("/oauth2-authroization-kakao") //로그인 실패 시
+                .successHandler(oAuth2SuccessHandler); //로그인 성공 시
 
         return http.build();
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
+    public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web
                 .httpFirewall(defaultHttpFirewall())
                 .ignoring()
@@ -52,11 +53,11 @@ public class SecurityConfig {
     }
 
     @Bean
-    public HttpFirewall defaultHttpFirewall(){
+    public HttpFirewall defaultHttpFirewall() {
         return new DefaultHttpFirewall();
     }
 
-    private String[] getPathInSwagger(){
+    private String[] getPathInSwagger() {
         return new String[]{
                 "/swagger-ui/index.html",
                 "/swagger-ui/swagger-ui.css",

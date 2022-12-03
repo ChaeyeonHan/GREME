@@ -13,4 +13,10 @@ public class Oauth2Controller {
         System.out.println("redirect url: /oauth2/login");
         return "success";
     }
+
+    @GetMapping("/login/naver")
+    public String loginNaver(){
+        System.out.println("redirect url: /oauth2/login/naver");
+        return "success";
+    }
 }
