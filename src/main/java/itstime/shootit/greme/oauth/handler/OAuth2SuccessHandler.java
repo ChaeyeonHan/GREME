@@ -27,6 +27,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         //회원이 아니라면 이메일만 리턴한다.
         request.setAttribute("email", oAuth2User.getAttribute("email"));
-        response.sendRedirect("/user/login");
+        response.setHeader("accessToken","test");
+        response.sendRedirect("/oauth2/login/success");
     }
 }
