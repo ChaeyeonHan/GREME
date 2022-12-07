@@ -24,12 +24,4 @@ public class SwaggerConfig {
                 .pathsToMatch("/user/**")
                 .build();
     }
-
-    @Bean
-    public GroupedOpenApi oauth2Api(){
-        return GroupedOpenApi.builder()
-                .group("oauth2")
-                .pathsToMatch("/oauth2/**")
-                .build();
-    }
 }

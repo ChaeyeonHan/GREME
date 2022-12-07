@@ -1,21 +1,21 @@
 package itstime.shootit.greme.oauth.presentation;
 
-import itstime.shootit.greme.oauth.application.OAuth2Service;
 import itstime.shootit.greme.oauth.dto.response.LoginResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/oauth2")
 public class Oauth2Controller {
-    private final OAuth2Service oAuth2Service;
 
-    @GetMapping("/login")
-    public LoginResponse login(@RequestHeader("accessToken") String accessToken){
-        System.out.println("ACCESSTOKEN: "+accessToken);
-        return oAuth2Service.findUserByAccessToken(accessToken);
+    @GetMapping("/login/success")
+    public LoginResponse getUserInfo(HttpServletRequest request) {
+        if (request.getHeader("accessToken") == null) {
+            return new LoginResponse((String) request.getAttribute("email"));
+        }//codedeploy test
+        return new LoginResponse((String) request.getAttribute("email")); //이미 회원이라면 request에 유저에 대한 정보들이 있을 것이다. 그거를 담아서 넘기자
     }
-
 }
