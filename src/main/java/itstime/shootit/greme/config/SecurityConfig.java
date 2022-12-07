@@ -55,6 +55,7 @@ public class SecurityConfig {
                 "/v3/api-docs/swagger-config",
                 "/swagger-ui/favicon-32x32.png",
                 "/v3/api-docs/user",
+                "/v3/api-docs/oauth2",
                 "/favicon.ico"
         };
     }
