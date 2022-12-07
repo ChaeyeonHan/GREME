@@ -14,6 +14,7 @@ public class Oauth2Controller {
 
     @GetMapping("/login")
     public LoginResponse login(@RequestHeader("accessToken") String accessToken){
+        System.out.println("ACCESSTOKEN: "+accessToken);
         return oAuth2Service.findUserByAccessToken(accessToken);
     }
 
