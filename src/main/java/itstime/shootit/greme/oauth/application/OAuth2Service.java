@@ -20,26 +20,44 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class OAuth2Service {
-    public LoginResponse findUserByAccessToken(String accessToken) {
+    private final String NAVER_URL = "https://openapi.naver.com/v1/nid/me";
+    private final String KAKAO_URL = "https://kapi.kakao.com/v2/user/me";
+
+    public LoginResponse findEmailByAccessToken(String domain, String accessToken) {
         String header = "Bearer " + accessToken; //Bearer 다음에 공백 추가
 
-        String apiURL = "https://openapi.naver.com/v1/nid/me";
+        String apiURL = domain.equals("naver") ? NAVER_URL : KAKAO_URL;
 
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("Authorization", header);
         String responseBody = getBody(apiURL, requestHeaders);
 
         System.out.println("RESPONSE BODY: " + responseBody);
-        return new LoginResponse(getEmail(responseBody));
+        return new LoginResponse(domain.equals("naver")
+                ? getNaverEmail(responseBody)
+                : getKakaoEmail(responseBody));
     }
 
-    private String getEmail(String responseBody) {
+    private String getNaverEmail(String responseBody) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = mapper.readValue(responseBody, Map.class);
             Map<String, String> profile = (Map<String, String>) map.get("response");
             String email = profile.get("email");
-            System.out.println(email);
+            System.out.println("NAVER_" + email);
+            return email;
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getKakaoEmail(String responseBody) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(responseBody, Map.class);
+            Map<String, String> profile = (Map<String, String>) map.get("kakao_account");
+            String email = profile.get("email");
+            System.out.println("KAKAO_" + email);
             return email;
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

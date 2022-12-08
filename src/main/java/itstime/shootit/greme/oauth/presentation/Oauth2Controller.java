@@ -14,11 +14,16 @@ import org.springframework.web.bind.annotation.*;
 public class Oauth2Controller {
     private final OAuth2Service oAuth2Service;
 
-    @Operation(summary = "소셜 로그인",  parameters = @Parameter(name = "accessToken", description = "액세스 토큰"))
+    @Operation(summary = "소셜 로그인",
+            parameters = {
+                    @Parameter(name = "accessToken", description = "액세스 토큰"),
+                    @Parameter(name = "domain", description = "naver or kakao")
+    })
     @GetMapping("/login")
-    public LoginResponse login(@RequestHeader("accessToken") String accessToken){
-        System.out.println("ACCESSTOKEN: "+accessToken);
-        return oAuth2Service.findUserByAccessToken(accessToken);
+    public LoginResponse login(
+            @RequestHeader("accessToken") String accessToken,
+            @RequestParam("domain") String domain) {
+        return oAuth2Service.findEmailByAccessToken(domain, accessToken);
     }
 
 }
