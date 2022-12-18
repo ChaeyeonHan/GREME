@@ -21,4 +21,7 @@ public class Interest {
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private InterestType interestType;
 }

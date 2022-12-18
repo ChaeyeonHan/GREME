@@ -1,11 +1,8 @@
 package itstime.shootit.greme.user.domain;
 
 import itstime.shootit.greme.challenge.ChallengeUser;
-import itstime.shootit.greme.post.domain.Comment;
-import itstime.shootit.greme.post.domain.Likes;
 import itstime.shootit.greme.user.BaseEntity;
 import itstime.shootit.greme.user.Gender;
-import itstime.shootit.greme.user.Purpose;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,16 +38,9 @@ public class User extends BaseEntity {
 
     private String area;  // "서울특별시 강남구"? 아님 따로 저장?
 
-    @Enumerated(EnumType.ORDINAL)
-    private Purpose purpose;
+    private String purpose;
 
     private String profileImg;
-
-    @OneToMany(mappedBy = "user")
-    private List<Comment> commentList;
-
-    @OneToMany(mappedBy = "user")
-    private List<Likes> likes;
 
     @OneToMany(mappedBy = "user")
     private List<ChallengeUser> challengeUsers;

@@ -24,19 +24,12 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany(mappedBy = "post")
-    private List<PostImage> postImageList;
+    private String image;
 
     private String content;
 
-    // 해시태그 검색기능?
+    private String hashtag;
 
-    @OneToMany(mappedBy = "post")
-    private List<Comment> comment;
-
-    @OneToMany(mappedBy = "post")
-    private List<Likes> likes;
-
-    private boolean status;
+    private boolean status;  // 공개여부
 
 }
