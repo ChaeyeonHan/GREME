@@ -1,8 +1,7 @@
-package itstime.shootit.greme.user.ui;
+package itstime.shootit.greme.user.infrastructure;
 
 import itstime.shootit.greme.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
