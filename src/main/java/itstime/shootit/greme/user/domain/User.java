@@ -28,8 +28,6 @@ public class User extends BaseEntity {
     @Column(unique = true)
     private String email;
 
-    private String password;
-
     @OneToMany(mappedBy = "user")
     private List<Interest> interest; // 관심사
 
