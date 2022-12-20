@@ -23,7 +23,7 @@ public class Oauth2Controller {
     public LoginResponse login(
             @RequestHeader("accessToken") String accessToken,
             @RequestParam("domain") String domain) {
-        return oAuth2Service.findEmailByAccessToken(domain, accessToken);
+        return oAuth2Service.loginByAccessToken(domain, accessToken);
     }
 
 }
