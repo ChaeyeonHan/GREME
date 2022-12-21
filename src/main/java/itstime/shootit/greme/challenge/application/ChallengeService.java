@@ -20,10 +20,12 @@ public class ChallengeService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public List<Challenge> challenge(Long userId){
+    public List<GetChallengeRes> challenge(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
-        return challengUserRepository.mfindChallenge(userId);
+        return challengUserRepository.mfindChallenge(userId).stream()
+                .map(GetChallengeRes::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

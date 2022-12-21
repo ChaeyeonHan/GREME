@@ -20,7 +20,7 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @GetMapping("/{userId}")
-    public List<Challenge> challenge(@PathVariable Long userId){
+    public List<GetChallengeRes> challenge(@PathVariable Long userId){
         return challengeService.challenge(userId);
     }
 
