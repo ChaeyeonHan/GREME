@@ -1,5 +1,6 @@
-package itstime.shootit.greme.challenge;
+package itstime.shootit.greme.challenge.domain;
 
+import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.user.BaseEntity;
 import itstime.shootit.greme.user.domain.User;
 import lombok.AllArgsConstructor;
