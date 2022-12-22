@@ -34,7 +34,7 @@ public class UserController {
                 .build();
     }
 
-    @Operation(summary = "중복된 닉네임인지 조회",
+    @Operation(summary = "회원가입",
             responses = {
                     @ApiResponse(responseCode = "422", description = "회원가입 실패", content = @Content(schema = @Schema(implementation = BusinessException.class))),
             }
