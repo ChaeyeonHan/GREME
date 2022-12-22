@@ -43,4 +43,17 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<ChallengeUser> challengeUsers;
 
+    public void updateGender(Integer genderType) {
+        switch (genderType){
+            case 0:
+                gender=Gender.MALE;
+                return;
+            case 1:
+                gender=Gender.FEMALE;
+                return;
+            case 2:
+                gender=Gender.ANYTHING;
+                return;
+        }
+    }
 }
