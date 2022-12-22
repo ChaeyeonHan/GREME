@@ -1,15 +1,22 @@
 package itstime.shootit.greme.user.application;
 
+import itstime.shootit.greme.user.domain.Interest;
+import itstime.shootit.greme.user.domain.InterestType;
 import itstime.shootit.greme.user.domain.User;
+import itstime.shootit.greme.user.dto.request.InterestReq;
 import itstime.shootit.greme.user.dto.request.SignUpReq;
 import itstime.shootit.greme.user.exception.ExistsUsernameException;
 import itstime.shootit.greme.user.exception.FailSignUpException;
+import itstime.shootit.greme.user.infrastructure.InterestRepository;
 import itstime.shootit.greme.user.infrastructure.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,6 +28,9 @@ class UserServiceTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private InterestRepository interestRepository;
 
     @Test
     @DisplayName("중복 닉네임이 없는 경우")
@@ -64,8 +74,32 @@ class UserServiceTest {
 
         //when & then
         assertThrows(FailSignUpException.class, () -> {
-            userService.signUp(new SignUpReq("email2","test"));
+            userService.signUp(new SignUpReq("email2", "test"));
         });
     }
 
+    @Test
+    @DisplayName("관심사 등록")
+    void registInterests() {
+        //given
+        User user = User.builder()
+                .username("test")
+                .email("email")
+                .build();
+        userRepository.save(user);
+        List<Integer> interests = List.of(0, 1, 2);
+        List<InterestType> expected = interests.stream()
+                .map(InterestType::fromValue)
+                .collect(Collectors.toList());
+
+        //when
+        userService.updateInterest("email", new InterestReq(interests));
+        List<InterestType> result = interestRepository.findAllByUser(user)
+                .stream()
+                .map(Interest::getInterestType)
+                .collect(Collectors.toList());
+
+        //then
+        assertArrayEquals(expected.toArray(), result.toArray());
+    }
 }
