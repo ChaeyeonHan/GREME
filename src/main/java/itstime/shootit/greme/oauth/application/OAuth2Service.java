@@ -3,6 +3,7 @@ package itstime.shootit.greme.oauth.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import itstime.shootit.greme.oauth.dto.response.LoginResponse;
+import itstime.shootit.greme.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -20,10 +21,12 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class OAuth2Service {
+    private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
     private final String NAVER_URL = "https://openapi.naver.com/v1/nid/me";
     private final String KAKAO_URL = "https://kapi.kakao.com/v2/user/me";
 
-    public LoginResponse findEmailByAccessToken(String domain, String accessToken) {
+    public LoginResponse loginByAccessToken(String domain, String accessToken) {
         String header = "Bearer " + accessToken; //Bearer 다음에 공백 추가
 
         String apiURL = domain.equals("naver") ? NAVER_URL : KAKAO_URL;
@@ -33,9 +36,13 @@ public class OAuth2Service {
         String responseBody = getBody(apiURL, requestHeaders);
 
         System.out.println("RESPONSE BODY: " + responseBody);
-        return new LoginResponse(domain.equals("naver")
-                ? getNaverEmail(responseBody)
-                : getKakaoEmail(responseBody));
+        String email = domain.equals("naver") ? getNaverEmail(responseBody) : getKakaoEmail(responseBody);
+
+        if(userRepository.existsByEmail(email)){ //기존 회원
+            return new LoginResponse(true, email, jwtTokenProvider.createAccessToken(email));
+        }
+        return new LoginResponse(false, email, null);
+
     }
 
     private String getNaverEmail(String responseBody) {
