@@ -1,10 +1,12 @@
 package itstime.shootit.greme.user.application;
 
+import itstime.shootit.greme.user.Gender;
 import itstime.shootit.greme.user.domain.Interest;
 import itstime.shootit.greme.user.domain.InterestType;
 import itstime.shootit.greme.user.domain.User;
 import itstime.shootit.greme.user.dto.request.InterestReq;
 import itstime.shootit.greme.user.dto.request.SignUpReq;
+import itstime.shootit.greme.user.dto.request.UserInfoReq;
 import itstime.shootit.greme.user.exception.ExistsUsernameException;
 import itstime.shootit.greme.user.exception.FailSignUpException;
 import itstime.shootit.greme.user.infrastructure.InterestRepository;
@@ -101,5 +103,28 @@ class UserServiceTest {
 
         //then
         assertArrayEquals(expected.toArray(), result.toArray());
+    }
+
+    @Test
+    @DisplayName("추가 정보 변경")
+    void updateUserInfo() {
+        //given
+        User user = User.builder()
+                .username("test")
+                .email("email")
+                .build();
+        userRepository.save(user);
+        String area = "서울특별시 강남구";
+        Integer genderType = 0;
+        String purpose = "몰라요";
+
+        //when
+        userService.updateInfo("email", new UserInfoReq(genderType, area, purpose));
+        User result = userRepository.findByEmail("email").get();
+
+        //then
+        assertEquals(true, area.equals(result.getArea())
+                && Gender.MALE.equals(result.getGender())
+                && purpose.equals(result.getPurpose()));
     }
 }

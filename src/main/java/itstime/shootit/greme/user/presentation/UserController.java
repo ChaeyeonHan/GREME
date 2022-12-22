@@ -11,6 +11,7 @@ import itstime.shootit.greme.oauth.application.JwtTokenProvider;
 import itstime.shootit.greme.user.application.UserService;
 import itstime.shootit.greme.user.dto.request.InterestReq;
 import itstime.shootit.greme.user.dto.request.SignUpReq;
+import itstime.shootit.greme.user.dto.request.UserInfoReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,4 +66,23 @@ public class UserController {
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
+
+    @Operation(summary = "사용자 추가 정보 입력",
+            parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
+            responses = {
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = BusinessException.class))),
+            }
+    )
+    @PatchMapping("/info")
+    public ResponseEntity<Void> updateUserInfo(
+            @RequestHeader("accessToken") String accessToken,
+            @RequestBody UserInfoReq userInfoReq
+    ) {
+        userService.updateInfo(jwtTokenProvider.getEmail(accessToken), userInfoReq);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+
 }

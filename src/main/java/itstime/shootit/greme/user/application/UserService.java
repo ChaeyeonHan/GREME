@@ -5,6 +5,7 @@ import itstime.shootit.greme.user.domain.InterestType;
 import itstime.shootit.greme.user.domain.User;
 import itstime.shootit.greme.user.dto.request.InterestReq;
 import itstime.shootit.greme.user.dto.request.SignUpReq;
+import itstime.shootit.greme.user.dto.request.UserInfoReq;
 import itstime.shootit.greme.user.exception.ExistsUsernameException;
 import itstime.shootit.greme.user.exception.FailSignUpException;
 import itstime.shootit.greme.user.exception.NotExistUserException;
@@ -56,4 +57,18 @@ public class UserService {
                         .build())
                 .collect(Collectors.toList()));
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateInfo(String email, UserInfoReq userInfoReq) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        user.updateArea(userInfoReq.getArea());
+        user.updateGender(userInfoReq.getGenderType());
+        user.updatePurpose(userInfoReq.getPurpose());
+
+        userRepository.save(user);
+    }
+
+
 }
