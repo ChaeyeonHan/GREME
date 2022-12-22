@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import itstime.shootit.greme.common.error.exception.BusinessException;
 import itstime.shootit.greme.oauth.application.JwtTokenProvider;
 import itstime.shootit.greme.user.application.UserService;
+import itstime.shootit.greme.user.dto.request.InterestReq;
 import itstime.shootit.greme.user.dto.request.SignUpReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -48,4 +49,20 @@ public class UserController {
                 .build();
     }
 
+    @Operation(summary = "관심사 수정",
+            parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
+            responses = {
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = BusinessException.class))),
+            }
+    )
+    @PatchMapping("/interest")
+    public ResponseEntity<Void> updateInterest(
+            @RequestHeader("accessToken") String accessToken,
+            @RequestBody InterestReq interestReq
+    ) {
+        userService.updateInterest(jwtTokenProvider.getEmail(accessToken), interestReq);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }
