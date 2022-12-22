@@ -61,4 +61,8 @@ public class User extends BaseEntity {
         this.area=area;
     }
 
+    public void updatePurpose(String purpose){
+        this.purpose=purpose;
+    }
+
 }
