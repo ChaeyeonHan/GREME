@@ -44,6 +44,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
 
+	// s3 설정
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	implementation 'mysql:mysql-connector-java'
 }
 
 tasks.named('test') {

@@ -29,8 +29,6 @@ public class Challenge extends BaseEntity {
 
     private Date deadline;
 
-//    private String image;
-
     @OneToMany(mappedBy = "challenge")
     private List<ChallengeUser> challengeUsers;
 
