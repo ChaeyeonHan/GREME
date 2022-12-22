@@ -56,4 +56,9 @@ public class User extends BaseEntity {
                 return;
         }
     }
+
+    public void updateArea(String area){
+        this.area=area;
+    }
+
 }
