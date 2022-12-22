@@ -1,7 +1,9 @@
 package itstime.shootit.greme.user.application;
 
 import itstime.shootit.greme.user.domain.User;
+import itstime.shootit.greme.user.dto.request.SignUpReq;
 import itstime.shootit.greme.user.exception.ExistsUsernameException;
+import itstime.shootit.greme.user.exception.FailSignUpException;
 import itstime.shootit.greme.user.infrastructure.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
@@ -25,7 +26,7 @@ class UserServiceTest {
     @DisplayName("중복 닉네임이 없는 경우")
     void isNotDuplicatedUsername() {
         //given 준비
-        String username = "test2";
+        String username = "test";
 
         //when 실행
         boolean isDuplicationUsername = userRepository.existsByUsername(username);
@@ -51,8 +52,20 @@ class UserServiceTest {
         });
     }
 
-    @AfterAll
-    void after() {
-        userRepository.deleteByUsername("test");
+    @Test
+    @DisplayName("중복 닉네임으로 인한 회원 가입 실패")
+    void failSignUpByDuplicationUsername() {
+        //given
+        User user = User.builder()
+                .username("test")
+                .email("email")
+                .build();
+        userRepository.save(user);
+
+        //when & then
+        assertThrows(FailSignUpException.class, () -> {
+            userService.signUp(new SignUpReq("email2","test"));
+        });
     }
+
 }
