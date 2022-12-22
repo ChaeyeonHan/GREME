@@ -38,7 +38,7 @@ public class UserController {
 
     @Operation(summary = "회원가입",
             responses = {
-                    @ApiResponse(responseCode = "422", description = "회원가입 실패", content = @Content(schema = @Schema(implementation = BusinessException.class))),
+                    @ApiResponse(responseCode = "422", description = "회원가입 실패", content = @Content(schema = @Schema(implementation = String.class))),
             }
     )
     @PostMapping("/sign-up")
@@ -53,7 +53,7 @@ public class UserController {
     @Operation(summary = "관심사 수정",
             parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
             responses = {
-                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = BusinessException.class))),
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class))),
             }
     )
     @PatchMapping("/interest")
@@ -70,7 +70,7 @@ public class UserController {
     @Operation(summary = "사용자 추가 정보 입력",
             parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
             responses = {
-                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = BusinessException.class))),
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class))),
             }
     )
     @PatchMapping("/info")
