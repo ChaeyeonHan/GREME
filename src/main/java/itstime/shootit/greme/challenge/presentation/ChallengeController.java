@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/oauth2/challenge")
+@RequestMapping("/challenge")
 public class ChallengeController {
 
     private final ChallengeService challengeService;
