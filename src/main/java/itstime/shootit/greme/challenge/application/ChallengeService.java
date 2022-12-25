@@ -1,6 +1,6 @@
 package itstime.shootit.greme.challenge.application;
 
-import itstime.shootit.greme.challenge.ChallengUserRepository;
+import itstime.shootit.greme.challenge.ChallengeUserRepository;
 import itstime.shootit.greme.challenge.ChallengeRepository;
 import itstime.shootit.greme.challenge.domain.ChallengeUser;
 import itstime.shootit.greme.challenge.dto.ChallengeSummary;
@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class ChallengeService {
 
-    private final ChallengUserRepository challengUserRepository;
+    private final ChallengeUserRepository challengeUserRepository;
     private final ChallengeRepository challengeRepository;
     private final UserRepository userRepository;
 
@@ -28,7 +28,7 @@ public class ChallengeService {
             throw new NotExistUserException();
         }
 
-        return challengUserRepository.mfindChallenge(userId);
+        return challengeUserRepository.mfindChallenge(userId);
     }
 
     @Transactional(readOnly = true)
@@ -37,7 +37,7 @@ public class ChallengeService {
             throw new NotExistUserException();
         }
 
-        return challengUserRepository.mfindJoinChallenge(userId);
+        return challengeUserRepository.mfindJoinChallenge(userId);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -46,13 +46,22 @@ public class ChallengeService {
                 .orElseThrow(NotExistUserException::new);
 
         try {
-            challengUserRepository.save(ChallengeUser.builder()
+            challengeUserRepository.save(ChallengeUser.builder()
                     .challenge(challengeRepository.findById(challengeId).get())
                     .user(user)
                     .build());
         } catch (Exception e){
             throw new FailAddChallengeException();
         }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteChallenge(String email, Long challengeId){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+        ChallengeUser challengeUserEntity = challengeUserRepository.findByChallengeIdAndUserId(challengeId, user.getId());
+
+        challengeUserRepository.delete(challengeUserEntity);
     }
 
 
