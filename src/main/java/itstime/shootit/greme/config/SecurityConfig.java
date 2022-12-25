@@ -27,6 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/user/**").permitAll()
+                .antMatchers("/challenge/**").permitAll()
                 .anyRequest().authenticated();
 
         return http.build();
