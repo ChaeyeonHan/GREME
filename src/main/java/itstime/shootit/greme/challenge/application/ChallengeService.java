@@ -45,14 +45,13 @@ public class ChallengeService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
 
-        try {
-            challengeUserRepository.save(ChallengeUser.builder()
-                    .challenge(challengeRepository.findById(challengeId).get())
-                    .user(user)
-                    .build());
-        } catch (Exception e){
+        if (challengeUserRepository.findByChallengeIdAndUserId(user.getId(), challengeId) != null){  // 이미 챌린지 등록되어 있으면
             throw new FailAddChallengeException();
         }
+        challengeUserRepository.save(ChallengeUser.builder()
+                .challenge(challengeRepository.findById(challengeId).get())
+                .user(user)
+                .build());
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -31,7 +31,7 @@ public class Challenge extends BaseEntity {
 
     private Date deadline;
 
-    @OneToMany(mappedBy = "challenge")
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     private List<ChallengeUser> challengeUsers;
 
 //    @Transient
