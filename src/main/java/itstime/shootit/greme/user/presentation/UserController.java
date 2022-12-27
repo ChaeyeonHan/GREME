@@ -28,7 +28,10 @@ public class UserController {
 
     @Operation(summary = "중복된 닉네임인지 조회",
             parameters = {@Parameter(name = "username", description = "유저 닉네임")},
-            responses = {@ApiResponse(responseCode = "409", description = "중복된 닉네임", content = @Content(schema = @Schema(implementation = String.class)))}
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "성공"),
+                    @ApiResponse(responseCode = "409", description = "중복된 닉네임", content = @Content(schema = @Schema(implementation = String.class)))
+            }
     )
     @GetMapping("/username/check")
     public ResponseEntity<Void> existsUsername(@RequestParam("username") String username) {
@@ -41,7 +44,7 @@ public class UserController {
     @Operation(summary = "회원가입",
             responses = {
                     @ApiResponse(responseCode = "422", description = "회원가입 실패", content = @Content(schema = @Schema(implementation = String.class))),
-                    @ApiResponse(responseCode = "200", description = "회원가입 성공", headers = {@Header(name = "accessToken", description = "액세스 토큰")})
+                    @ApiResponse(responseCode = "204", description = "회원가입 성공", headers = {@Header(name = "accessToken", description = "액세스 토큰")})
             }
     )
     @PostMapping("/sign-up")
@@ -56,6 +59,7 @@ public class UserController {
     @Operation(summary = "관심사 수정",
             parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
             responses = {
+                    @ApiResponse(responseCode = "204", description = "성공"),
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class))),
             }
     )
@@ -73,6 +77,7 @@ public class UserController {
     @Operation(summary = "사용자 추가 정보 입력",
             parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
             responses = {
+                    @ApiResponse(responseCode = "204", description = "성공"),
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class))),
             }
     )
