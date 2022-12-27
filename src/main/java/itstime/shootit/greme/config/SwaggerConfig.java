@@ -32,4 +32,12 @@ public class SwaggerConfig {
                 .pathsToMatch("/oauth2/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi challengeApi(){
+        return  GroupedOpenApi.builder()
+                .group("challenge")
+                .pathsToMatch("/challenge/**")
+                .build();
+    }
 }
