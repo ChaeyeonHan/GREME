@@ -3,6 +3,7 @@ package itstime.shootit.greme.user.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,7 +27,8 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Operation(summary = "중복된 닉네임인지 조회",
-            parameters = {@Parameter(name = "username", description = "유저 닉네임")}
+            parameters = {@Parameter(name = "username", description = "유저 닉네임")},
+            responses = {@ApiResponse(responseCode = "409", description = "중복된 닉네임", content = @Content(schema = @Schema(implementation = String.class)))}
     )
     @GetMapping("/username/check")
     public ResponseEntity<Void> existsUsername(@RequestParam("username") String username) {
@@ -39,6 +41,7 @@ public class UserController {
     @Operation(summary = "회원가입",
             responses = {
                     @ApiResponse(responseCode = "422", description = "회원가입 실패", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "200", description = "회원가입 성공", headers = {@Header(name = "accessToken", description = "액세스 토큰")})
             }
     )
     @PostMapping("/sign-up")
