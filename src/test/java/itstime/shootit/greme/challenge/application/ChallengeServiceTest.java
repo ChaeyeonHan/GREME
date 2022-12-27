@@ -31,7 +31,7 @@ public class ChallengeServiceTest {
 
     @Test
     @DisplayName("챌린지 등록")
-    void add_challenge() {
+    void addChallenge() {
         //given 준비
         User user = User.builder()
                 .username("username1")
