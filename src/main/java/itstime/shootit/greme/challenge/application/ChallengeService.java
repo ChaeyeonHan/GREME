@@ -1,6 +1,8 @@
 package itstime.shootit.greme.challenge.application;
 
 import itstime.shootit.greme.challenge.ChallengUserRepository;
+import itstime.shootit.greme.challenge.ChallengeRepository;
+import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.challenge.dto.ChallengeSummary;
 import itstime.shootit.greme.user.exception.NotExistUserException;
 import itstime.shootit.greme.user.infrastructure.UserRepository;
@@ -16,6 +18,8 @@ public class ChallengeService {
 
     private final ChallengUserRepository challengUserRepository;
     private final UserRepository userRepository;
+
+    private final ChallengeRepository challengeRepository;
 
     @Transactional(readOnly = true)
     public List<ChallengeSummary> challenge(Long userId){
@@ -33,6 +37,12 @@ public class ChallengeService {
         }
 
         return challengUserRepository.mfindJoinChallenge(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public int joinTime(Long userId){
+        List<Challenge> allByUserId = challengeRepository.findAllByUserId(userId);
+        return allByUserId.size();
     }
 
 
