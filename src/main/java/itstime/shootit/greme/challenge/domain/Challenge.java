@@ -34,6 +34,9 @@ public class Challenge extends BaseEntity {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     private List<ChallengeUser> challengeUsers;
 
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    private List<ChallengePost> challengePosts;
+
 //    @Transient
 //    private int res;
 //
