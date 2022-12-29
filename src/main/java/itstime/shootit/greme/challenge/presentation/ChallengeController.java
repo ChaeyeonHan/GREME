@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import itstime.shootit.greme.challenge.application.ChallengeService;
 import itstime.shootit.greme.challenge.dto.ChallengeSummary;
+import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import itstime.shootit.greme.oauth.application.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,7 @@ public class ChallengeController {
 
     @Operation(summary = "다이어리에 사용할 사용자가 참여중인 챌린지 제목만 조회", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")})
     @GetMapping("/participating/title")
-    public List<String> findParticipatingChallengeTitle(@RequestHeader("accessToken") String accessToken){
+    public List<ChallengeTitle> findParticipatingChallengeTitle(@RequestHeader("accessToken") String accessToken){
         return challengeService.findJoinChallengeTitle(jwtTokenProvider.getEmail(accessToken));
     }
 }

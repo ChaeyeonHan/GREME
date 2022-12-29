@@ -2,6 +2,7 @@ package itstime.shootit.greme.challenge;
 
 import itstime.shootit.greme.challenge.domain.ChallengeUser;
 import itstime.shootit.greme.challenge.dto.ChallengeSummary;
+import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,7 +20,7 @@ public interface ChallengeUserRepository extends JpaRepository<ChallengeUser, Lo
 
     ChallengeUser findByChallengeIdAndUserId(Long challengeId, Long userId);
 
-    @Query(value = "SELECT c.title FROM Challenge c LEFT OUTER JOIN ChallengeUser cu on c.c_id = cu.challenge_id " +
+    @Query(value = "SELECT c.id, c.title FROM Challenge c LEFT OUTER JOIN ChallengeUser cu on c.c_id = cu.challenge_id " +
             "WHERE cu.user_id = :userId ORDER BY c.deadline DESC;", nativeQuery = true)
-    List<String> findJoinChallengeTitle(Long userId);
+    List<ChallengeTitle> findJoinChallengeTitle(Long userId);
 }

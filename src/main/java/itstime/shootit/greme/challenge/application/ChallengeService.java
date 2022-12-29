@@ -4,6 +4,7 @@ import itstime.shootit.greme.challenge.ChallengeUserRepository;
 import itstime.shootit.greme.challenge.ChallengeRepository;
 import itstime.shootit.greme.challenge.domain.ChallengeUser;
 import itstime.shootit.greme.challenge.dto.ChallengeSummary;
+import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import itstime.shootit.greme.challenge.exception.FailAddChallengeException;
 import itstime.shootit.greme.user.domain.User;
 import itstime.shootit.greme.user.exception.NotExistUserException;
@@ -64,7 +65,7 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public List<String> findJoinChallengeTitle(String email) {
+    public List<ChallengeTitle> findJoinChallengeTitle(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
 
