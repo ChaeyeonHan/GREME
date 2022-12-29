@@ -52,5 +52,9 @@ public class ChallengeController {
                 .build();
     }
 
-
+    @Operation(summary = "다이어리에 사용할 사용자가 참여중인 챌린지 제목만 조회", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")})
+    @GetMapping("/participating/title")
+    public List<String> findParticipatingChallengeTitle(@RequestHeader("accessToken") String accessToken){
+        return challengeService.findJoinChallengeTitle(jwtTokenProvider.getEmail(accessToken));
+    }
 }

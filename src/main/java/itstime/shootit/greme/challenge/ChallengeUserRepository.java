@@ -18,4 +18,8 @@ public interface ChallengeUserRepository extends JpaRepository<ChallengeUser, Lo
     List<ChallengeSummary> mfindJoinChallenge(Long userId);
 
     ChallengeUser findByChallengeIdAndUserId(Long challengeId, Long userId);
+
+    @Query(value = "SELECT c.title FROM Challenge c LEFT OUTER JOIN ChallengeUser cu on c.c_id = cu.challenge_id " +
+            "WHERE cu.user_id = :userId ORDER BY c.deadline DESC;", nativeQuery = true)
+    List<String> findJoinChallengeTitle(Long userId);
 }

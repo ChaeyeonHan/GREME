@@ -63,5 +63,11 @@ public class ChallengeService {
         challengeUserRepository.delete(challengeUserEntity);
     }
 
+    @Transactional(readOnly = true)
+    public List<String> findJoinChallengeTitle(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
 
+        return challengeUserRepository.findJoinChallengeTitle(user.getId());
+    }
 }
