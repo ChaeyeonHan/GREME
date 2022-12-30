@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/challenge/**").permitAll()
+                .antMatchers("/post/**").permitAll()
                 .anyRequest().authenticated();
 
         return http.build();
