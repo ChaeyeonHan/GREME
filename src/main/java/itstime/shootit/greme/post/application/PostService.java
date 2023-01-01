@@ -5,6 +5,9 @@ import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.challenge.domain.ChallengePost;
 import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
 import itstime.shootit.greme.post.domain.Post;
+import itstime.shootit.greme.post.dto.GetChallengeTitleRes;
+import itstime.shootit.greme.post.dto.GetPost;
+import itstime.shootit.greme.post.dto.GetShowPostRes;
 import itstime.shootit.greme.post.dto.request.CreationReq;
 import itstime.shootit.greme.post.infrastructure.PostRepository;
 import itstime.shootit.greme.user.domain.User;
@@ -49,5 +52,21 @@ public class PostService {
                         .post(post)
                         .build())
                 .collect(Collectors.toList()));
+    }
+
+    public GetShowPostRes showPost(String email, Long post_id){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+        GetChallengeTitleRes challengeTitle = postRepository.findChallengeTitle(post_id);  // 해당 챌린지 title 가져오기
+
+        GetPost getPost = postRepository.findOnePost(post_id);
+
+        return GetShowPostRes.builder()
+                .username(user.getUsername())
+                .image(getPost.getImage())
+                .content(getPost.getContent())
+                .hashtag(getPost.getHashtag())
+                .createdDate(getPost.getCreatedDate())
+                .challengeTitle(challengeTitle).build();
     }
 }
