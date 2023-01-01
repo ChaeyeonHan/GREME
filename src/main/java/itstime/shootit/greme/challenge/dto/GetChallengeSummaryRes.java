@@ -2,11 +2,9 @@ package itstime.shootit.greme.challenge.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public interface ChallengeSummary {
+public interface GetChallengeSummaryRes {
 
     @Schema(description = "챌린지 제목")
     String getTitle();
