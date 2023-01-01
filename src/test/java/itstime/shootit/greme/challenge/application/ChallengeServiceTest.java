@@ -1,7 +1,7 @@
 package itstime.shootit.greme.challenge.application;
 
-import itstime.shootit.greme.challenge.ChallengeRepository;
-import itstime.shootit.greme.challenge.ChallengeUserRepository;
+import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
+import itstime.shootit.greme.challenge.infrastructure.ChallengeUserRepository;
 import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.challenge.domain.ChallengeUser;
 import itstime.shootit.greme.challenge.exception.FailAddChallengeException;

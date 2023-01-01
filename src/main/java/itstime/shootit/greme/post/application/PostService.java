@@ -1,6 +1,6 @@
 package itstime.shootit.greme.post.application;
 
-import itstime.shootit.greme.challenge.ChallengeRepository;
+import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
 import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.challenge.domain.ChallengePost;
 import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
