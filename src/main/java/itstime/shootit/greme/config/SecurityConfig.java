@@ -60,6 +60,7 @@ public class SecurityConfig {
                 "/v3/api-docs/user",
                 "/v3/api-docs/oauth2",
                 "/v3/api-docs/challenge",
+                "/v3/api-docs/post",
                 "/favicon.ico"
         };
     }

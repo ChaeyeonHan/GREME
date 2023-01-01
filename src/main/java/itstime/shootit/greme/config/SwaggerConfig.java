@@ -40,4 +40,12 @@ public class SwaggerConfig {
                 .pathsToMatch("/challenge/**")
                 .build();
     }
+
+    @Bean
+    public GroupedOpenApi postApi(){
+        return  GroupedOpenApi.builder()
+                .group("post")
+                .pathsToMatch("/post/**")
+                .build();
+    }
 }
