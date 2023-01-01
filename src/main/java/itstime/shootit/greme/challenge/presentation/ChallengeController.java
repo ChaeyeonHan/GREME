@@ -64,7 +64,7 @@ public class ChallengeController {
         @Parameter(name = "user_id", description = "프로필 조회하려는 유저의 id값")})
     @GetMapping("/profile/{user_id}")
     public GetProfileRes showUserProfile(@PathVariable Long user_id, @RequestHeader("accessToken") String accessToken){
-        return challengeService.showUserProfile(user_id);
+        return challengeService.showUserProfile(jwtTokenProvider.getEmail(accessToken), user_id);
     }
 
 }

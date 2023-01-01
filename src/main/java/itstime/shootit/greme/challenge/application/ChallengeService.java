@@ -77,8 +77,8 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public GetProfileRes showUserProfile(Long user_id){
-        User user = userRepository.findById(user_id)
+    public GetProfileRes showUserProfile(String email, Long user_id){
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
 
         List<GetChallengeSummaryRes> getChallengeSummaryRes = challengeUserRepository.findRecentJoinChallenge(user_id); // 이번달에 참여한 챌린지 가져오기
