@@ -5,8 +5,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,9 +17,11 @@ import java.time.LocalDateTime;
 public class BaseEntity {
 
     @CreatedDate
-    private LocalDateTime createdDate;  // 생성 시간
+    @Column(nullable = false)
+    private Timestamp createdDate;  // 생성 시간
 
     @LastModifiedDate
-    private LocalDateTime modifiedDate;  // 최근 수정 시간
+    @Column(nullable = false)
+    private Timestamp modifiedDate;  // 최근 수정 시간
 
 }

@@ -1,12 +1,15 @@
 package itstime.shootit.greme.challenge.application;
 
-import itstime.shootit.greme.challenge.ChallengeUserRepository;
-import itstime.shootit.greme.challenge.ChallengeRepository;
+import itstime.shootit.greme.challenge.infrastructure.ChallengeUserRepository;
+import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
 import itstime.shootit.greme.challenge.domain.ChallengeUser;
-import itstime.shootit.greme.challenge.dto.ChallengeSummary;
+import itstime.shootit.greme.challenge.dto.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import itstime.shootit.greme.challenge.exception.FailAddChallengeException;
+import itstime.shootit.greme.post.dto.GetPostRes;
+import itstime.shootit.greme.post.infrastructure.PostRepository;
 import itstime.shootit.greme.user.domain.User;
+import itstime.shootit.greme.user.dto.GetProfileRes;
 import itstime.shootit.greme.user.exception.NotExistUserException;
 import itstime.shootit.greme.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +25,10 @@ public class ChallengeService {
     private final ChallengeUserRepository challengeUserRepository;
     private final ChallengeRepository challengeRepository;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
     @Transactional(readOnly = true)
-    public List<ChallengeSummary> challenge(Long userId){
+    public List<GetChallengeSummaryRes> challenge(Long userId){
         if (!userRepository.existsById(userId)) {
             throw new NotExistUserException();
         }
@@ -33,7 +37,7 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public List<ChallengeSummary> joinChallenge(Long userId){
+    public List<GetChallengeSummaryRes> joinChallenge(Long userId){
         if(!userRepository.existsById(userId)) {
             throw new NotExistUserException();
         }
@@ -70,5 +74,21 @@ public class ChallengeService {
                 .orElseThrow(NotExistUserException::new);
 
         return challengeUserRepository.findJoinChallengeTitle(user.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public GetProfileRes showUserProfile(String email, Long user_id){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        List<GetChallengeSummaryRes> getChallengeSummaryRes = challengeUserRepository.findRecentJoinChallenge(user_id); // 이번달에 참여한 챌린지 가져오기
+        List<GetPostRes> postRes = postRepository.findRecentPostByUserEmail(user_id);  // 가장 최근에 작성된 post 6개
+
+        return GetProfileRes.builder()
+                .profileImg(user.getProfileImg())
+                .username(user.getUsername())
+                .challengeSummary(getChallengeSummaryRes)
+                .postRes(postRes).build();
+
     }
 }

@@ -1,4 +1,4 @@
-package itstime.shootit.greme.challenge;
+package itstime.shootit.greme.challenge.infrastructure;
 
 import itstime.shootit.greme.challenge.domain.Challenge;
 import org.springframework.data.jpa.repository.JpaRepository;
