@@ -61,10 +61,10 @@ public class ChallengeController {
     }
 
     @Operation(summary = "다른 유저의 프로필 조회하기", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),
-        @Parameter(name = "email", description = "프로필 조회하려는 유저의 이메일")})
-    @GetMapping("/profile/{email}")
-    public GetProfileRes showUserProfile(@PathVariable String email, @RequestHeader("accessToken") String accessToken){
-        return challengeService.showUserProfile(email);
+        @Parameter(name = "user_id", description = "프로필 조회하려는 유저의 id값")})
+    @GetMapping("/profile/{user_id}")
+    public GetProfileRes showUserProfile(@PathVariable Long user_id, @RequestHeader("accessToken") String accessToken){
+        return challengeService.showUserProfile(user_id);
     }
 
 }
