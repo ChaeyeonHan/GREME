@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import itstime.shootit.greme.aws.application.S3Uploader;
 import itstime.shootit.greme.oauth.application.JwtTokenProvider;
 import itstime.shootit.greme.post.application.PostService;
+import itstime.shootit.greme.post.dto.GetShowPostRes;
 import itstime.shootit.greme.post.dto.request.CreationReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,4 +44,13 @@ public class PostController {
                 .status(HttpStatus.NO_CONTENT)
                 .build();
     }
+
+    @Operation(summary = "다른 유저의 다이어리 조회하기", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),
+        @Parameter(name = "postId", description = "조회하려는 다이어리 id")})
+    @GetMapping("/{postId}")
+    public GetShowPostRes showPost(@PathVariable Long postId, @RequestHeader("accessToken") String accessToken){
+        return postService.showPost(jwtTokenProvider.getEmail(accessToken), postId);
+    }
+
+
 }
