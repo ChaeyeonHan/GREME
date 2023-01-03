@@ -2,7 +2,7 @@ package itstime.shootit.greme.post.infrastructure;
 
 import itstime.shootit.greme.post.domain.Post;
 import itstime.shootit.greme.post.dto.GetChallengeTitleRes;
-import itstime.shootit.greme.post.dto.GetPost;
+import itstime.shootit.greme.post.dto.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.GetPostRes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,5 +20,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<GetPostRes> findRecentPostByUserEmail(Long userId);
 
     @Query(value = "SELECT u.username, p.image, p.content, p.hashtag, p.createdDate FROM Post p LEFT OUTER JOIN User u on u.id = p.user_id WHERE p.id = :post_id", nativeQuery = true)
-    GetPost findOnePost(Long post_id);
+    GetPostSummaryRes findOnePost(Long post_id);
 }

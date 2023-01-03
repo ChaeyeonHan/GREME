@@ -27,7 +27,7 @@ public class Challenge extends BaseEntity {
 
     private String info;
 
-    private int cur_num;
+    private int num;
 
     private Date deadline;
 

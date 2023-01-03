@@ -13,7 +13,7 @@ public interface GetChallengeSummaryRes {
     String getInfo();
 
     @Schema(description = "챌린지 참여 인원")
-    int getCur_num();
+    int getNum();
 
     @Schema(description = "챌린지 종료일")
     Date getDeadline();
