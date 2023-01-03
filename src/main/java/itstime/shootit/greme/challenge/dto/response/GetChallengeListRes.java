@@ -1,8 +1,8 @@
-package itstime.shootit.greme.challenge.dto;
+package itstime.shootit.greme.challenge.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public interface GetChallengeList {
+public interface GetChallengeListRes {
 
     @Schema(description = "챌린지 고유 번호")
     Long getId();

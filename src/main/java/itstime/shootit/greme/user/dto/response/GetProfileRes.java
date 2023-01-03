@@ -1,8 +1,8 @@
-package itstime.shootit.greme.user.dto;
+package itstime.shootit.greme.user.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import itstime.shootit.greme.challenge.dto.GetChallengeSummaryRes;
-import itstime.shootit.greme.post.dto.GetPostRes;
+import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
+import itstime.shootit.greme.post.dto.response.GetPostRes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

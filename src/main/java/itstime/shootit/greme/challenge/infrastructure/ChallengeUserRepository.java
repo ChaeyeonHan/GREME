@@ -1,8 +1,7 @@
 package itstime.shootit.greme.challenge.infrastructure;
 
 import itstime.shootit.greme.challenge.domain.ChallengeUser;
-import itstime.shootit.greme.challenge.dto.GetChallengeList;
-import itstime.shootit.greme.challenge.dto.GetChallengeSummaryRes;
+import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

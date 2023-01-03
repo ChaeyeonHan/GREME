@@ -1,6 +1,7 @@
-package itstime.shootit.greme.post.dto;
+package itstime.shootit.greme.post.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import itstime.shootit.greme.challenge.dto.response.GetChallengeTitleRes;
 import lombok.*;
 
 import java.sql.Timestamp;
