@@ -6,6 +6,7 @@ import itstime.shootit.greme.challenge.application.ChallengeService;
 import itstime.shootit.greme.challenge.dto.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import itstime.shootit.greme.oauth.application.JwtTokenProvider;
+import itstime.shootit.greme.post.dto.ChallengeDTO;
 import itstime.shootit.greme.user.dto.GetProfileRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -65,6 +66,21 @@ public class ChallengeController {
     @GetMapping("/profile/{user_id}")
     public GetProfileRes showUserProfile(@PathVariable Long user_id, @RequestHeader("accessToken") String accessToken){
         return challengeService.showUserProfile(jwtTokenProvider.getEmail(accessToken), user_id);
+    }
+
+//    @Operation(summary = "챌린지 클릭시 챌린지 정보 & 참여 목록 조회하기", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),
+//        @Parameter(name = "challengeId", description = "챌린지 고유 id값")})
+//    @GetMapping("/{challengeId}")
+//    public ChallengeDTO showChallengeList(@PathVariable Long challengeId, @RequestHeader("accessToken") String accessToken){
+//        return challengeService.showChallengeList(jwtTokenProvider.getEmail(accessToken), challengeId);
+//
+//    }
+
+    @GetMapping("/{challenge_id}/vv")
+    public ChallengeDTO showChallengeList(@PathVariable Long challenge_id){
+        System.out.println("들어와?");
+        return challengeService.showChallengeList("test@naver.com", challenge_id);
+
     }
 
 }
