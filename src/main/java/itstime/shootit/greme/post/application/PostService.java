@@ -1,11 +1,13 @@
 package itstime.shootit.greme.post.application;
 
 import itstime.shootit.greme.challenge.ChallengeRepository;
+import itstime.shootit.greme.challenge.ChallengeUserRepository;
 import itstime.shootit.greme.challenge.domain.Challenge;
-import itstime.shootit.greme.challenge.domain.ChallengePost;
-import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
+import itstime.shootit.greme.challenge.domain.ChallengeUser;
 import itstime.shootit.greme.post.domain.Post;
 import itstime.shootit.greme.post.dto.request.CreationReq;
+import itstime.shootit.greme.post.dto.response.PostRes;
+import itstime.shootit.greme.post.exception.NotExistsPostException;
 import itstime.shootit.greme.post.infrastructure.PostRepository;
 import itstime.shootit.greme.user.domain.User;
 import itstime.shootit.greme.user.exception.NotExistUserException;
@@ -23,7 +25,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ChallengeRepository challengeRepository;
-    private final ChallengePostRepository challengePostRepository;
+    private final ChallengeUserRepository challengeUserRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public void create(CreationReq creationReq, List<String> fileNames, String email) {
@@ -43,11 +45,20 @@ public class PostService {
                 .build();
         postRepository.save(post); //게시글 저장
 
-        challengePostRepository.saveAll(challenges.stream() //challenge에 post등록
-                .map(challenge -> ChallengePost.builder()
+        challengeUserRepository.saveAll(challenges.stream() //challenge에 post등록
+                .map(challenge -> ChallengeUser.builder()
                         .challenge(challenge)
                         .post(post)
                         .build())
                 .collect(Collectors.toList()));
+    }
+
+
+    public PostRes findByDate(String date, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        return postRepository.findPostByUserAndDate(user.getId(), date)
+                .orElseThrow(NotExistsPostException::new);
     }
 }
