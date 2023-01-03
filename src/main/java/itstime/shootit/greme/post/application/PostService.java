@@ -1,10 +1,15 @@
 package itstime.shootit.greme.post.application;
 
-import itstime.shootit.greme.challenge.ChallengeRepository;
-import itstime.shootit.greme.challenge.ChallengeUserRepository;
+
+import itstime.shootit.greme.challenge.domain.ChallengePost;
+import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
+import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
+
 import itstime.shootit.greme.challenge.domain.Challenge;
-import itstime.shootit.greme.challenge.domain.ChallengeUser;
 import itstime.shootit.greme.post.domain.Post;
+import itstime.shootit.greme.challenge.dto.response.GetChallengeTitleRes;
+import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
+import itstime.shootit.greme.post.dto.response.GetShowPostRes;
 import itstime.shootit.greme.post.dto.request.CreationReq;
 import itstime.shootit.greme.post.dto.response.PostRes;
 import itstime.shootit.greme.post.exception.NotExistsPostException;
@@ -25,7 +30,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ChallengeRepository challengeRepository;
-    private final ChallengeUserRepository challengeUserRepository;
+    private final ChallengePostRepository challengePostRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public void create(CreationReq creationReq, List<String> fileNames, String email) {
@@ -45,8 +50,8 @@ public class PostService {
                 .build();
         postRepository.save(post); //게시글 저장
 
-        challengeUserRepository.saveAll(challenges.stream() //challenge에 post등록
-                .map(challenge -> ChallengeUser.builder()
+        challengePostRepository.saveAll(challenges.stream() //challenge에 post등록
+                .map(challenge -> ChallengePost.builder()
                         .challenge(challenge)
                         .post(post)
                         .build())
@@ -60,5 +65,21 @@ public class PostService {
 
         return postRepository.findPostByUserAndDate(user.getId(), date)
                 .orElseThrow(NotExistsPostException::new);
+    }
+
+    public GetShowPostRes showPost(String email, Long post_id){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+        GetChallengeTitleRes challengeTitle = challengePostRepository.findChallengeTitle(post_id);  // 해당 챌린지 title 가져오기
+
+        GetPostSummaryRes getPost = postRepository.findOnePost(post_id);
+
+        return GetShowPostRes.builder()
+                .username(user.getUsername())
+                .image(getPost.getImage())
+                .content(getPost.getContent())
+                .hashtag(getPost.getHashtag())
+                .createdDate(getPost.getCreatedDate())
+                .challengeTitle(challengeTitle).build();
     }
 }

@@ -1,9 +1,7 @@
 package itstime.shootit.greme.challenge.domain;
 
-import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.post.domain.Post;
 import itstime.shootit.greme.user.BaseEntity;
-import itstime.shootit.greme.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,8 +14,7 @@ import javax.persistence.*;
 @Builder
 @Getter
 @Entity
-public class ChallengeUser extends BaseEntity {
-
+public class ChallengePost extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +24,6 @@ public class ChallengeUser extends BaseEntity {
     private Challenge challenge;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
+    @JoinColumn(name = "post_id")
+    private Post post;
 }

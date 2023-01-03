@@ -50,7 +50,7 @@ class PostServiceTest {
         postRepository.save(post);
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String createdDate = simpleDateFormat.format(Timestamp.valueOf(post.getCreatedDate()));
+        String createdDate = simpleDateFormat.format(post.getCreatedDate());
 
         //when
         PostRes postResponse = postService.findByDate(createdDate, "email");

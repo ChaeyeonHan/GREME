@@ -1,6 +1,6 @@
 package itstime.shootit.greme.post.domain;
 
-import itstime.shootit.greme.challenge.domain.ChallengeUser;
+import itstime.shootit.greme.challenge.domain.ChallengePost;
 import itstime.shootit.greme.user.BaseEntity;
 import itstime.shootit.greme.user.domain.User;
 import lombok.AllArgsConstructor;
@@ -34,6 +34,6 @@ public class Post extends BaseEntity {
     private boolean status;  // 공개여부
 
     @OneToMany(mappedBy = "post")
-    private List<ChallengeUser> challengeUsers;
+    private List<ChallengePost> challengePosts;
 
 }
