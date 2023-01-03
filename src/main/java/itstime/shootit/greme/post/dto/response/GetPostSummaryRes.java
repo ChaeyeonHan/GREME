@@ -1,4 +1,4 @@
-package itstime.shootit.greme.post.dto;
+package itstime.shootit.greme.post.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

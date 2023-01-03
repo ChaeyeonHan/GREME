@@ -1,11 +1,9 @@
 package itstime.shootit.greme.challenge.infrastructure;
 
 import itstime.shootit.greme.challenge.domain.Challenge;
-import itstime.shootit.greme.challenge.dto.GetChallengeList;
-import itstime.shootit.greme.challenge.dto.GetChallengeSummaryRes;
+import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ChallengeRepository extends JpaRepository<Challenge, Long> {

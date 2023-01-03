@@ -1,23 +1,21 @@
 package itstime.shootit.greme.challenge.application;
 
-import itstime.shootit.greme.challenge.domain.Challenge;
-import itstime.shootit.greme.challenge.dto.GetChallengeList;
+import itstime.shootit.greme.challenge.dto.response.GetChallengeListRes;
 import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeUserRepository;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
 import itstime.shootit.greme.challenge.domain.ChallengeUser;
-import itstime.shootit.greme.challenge.dto.GetChallengeSummaryRes;
+import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import itstime.shootit.greme.challenge.exception.FailAddChallengeException;
-import itstime.shootit.greme.post.dto.ChallengeDTO;
-import itstime.shootit.greme.post.dto.GetPostRes;
+import itstime.shootit.greme.challenge.dto.response.ChallengeRes;
+import itstime.shootit.greme.post.dto.response.GetPostRes;
 import itstime.shootit.greme.post.infrastructure.PostRepository;
 import itstime.shootit.greme.user.domain.User;
-import itstime.shootit.greme.user.dto.GetProfileRes;
+import itstime.shootit.greme.user.dto.response.GetProfileRes;
 import itstime.shootit.greme.user.exception.NotExistUserException;
 import itstime.shootit.greme.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,20 +98,17 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public ChallengeDTO showChallengeList(String email, Long challenge_id){
+    public ChallengeRes showChallengeList(String email, Long challenge_id){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
 
         boolean status = challengeUserRepository.existsByChallengeIdAndUserId(challenge_id, user.getId());  // 해당 챌린지에 참여하는지
-//        System.out.println(status);
-        List<GetChallengeList> challengeList = challengePostRepository.findAllImageByChallengeId(challenge_id);  // 챌린지 참여 목록
-        System.out.println("참여목록 찾음");
+        List<GetChallengeListRes> challengeList = challengePostRepository.findAllImageByChallengeId(challenge_id);  // 챌린지 참여 목록
 
         GetChallengeSummaryRes challengeSummary = challengeRepository.findById(challenge_id, GetChallengeSummaryRes.class); // 해당 챌린지 정보
-        System.out.println("정보 찾음");
 
 
-        return ChallengeDTO.builder()
+        return ChallengeRes.builder()
                 .status(status)
                 .getChallengeLists(challengeList)
                 .summaryRes(challengeSummary).build();
