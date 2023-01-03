@@ -45,13 +45,12 @@ public class PostController {
                 .build();
     }
 
-    @Operation(summary = "다이어리 작성",
+    @Operation(summary = "날짜로 다이어리 조회",
             parameters = {@Parameter(name = "date", description = "조회할 날짜 ex)2022-12-20"),
                     @Parameter(name = "accessToken", description = "액세스 토큰")},
             responses = {
                     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PostRes.class))),
-                    @ApiResponse(responseCode = "404", description = "존재하지 않는 다이어리", content = @Content(schema = @Schema(implementation = String.class))),
-                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class)))
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 다이어리", content = @Content(schema = @Schema(implementation = String.class)))
     })
     @GetMapping("{date}")
     public PostRes getPost(@PathVariable("date") String date, @RequestHeader("accessToken") String accessToken) {
