@@ -7,6 +7,7 @@ import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
 import itstime.shootit.greme.post.domain.Post;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeTitleRes;
 import itstime.shootit.greme.post.dto.request.ChangeReq;
+import itstime.shootit.greme.post.dto.request.DeletionReq;
 import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.response.GetShowPostRes;
 import itstime.shootit.greme.post.dto.request.CreationReq;
@@ -102,5 +103,13 @@ public class PostService {
     public String findImageUrl(Long postId) {
         return postRepository.findImageById(postId)
                 .orElseThrow(NotExistUserException::new);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteIdAndEmail(DeletionReq deletionReq, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        postRepository.deleteByIdAndUser(deletionReq.getId(), user);
     }
 }

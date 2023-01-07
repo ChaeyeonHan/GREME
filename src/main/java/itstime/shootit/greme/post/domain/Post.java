@@ -33,7 +33,7 @@ public class Post extends BaseEntity {
 
     private boolean status;  // 공개여부
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<ChallengePost> challengePosts;
 
     public void updateImage(String image) {

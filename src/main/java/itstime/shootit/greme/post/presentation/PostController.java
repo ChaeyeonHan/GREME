@@ -9,6 +9,7 @@ import itstime.shootit.greme.aws.application.S3Uploader;
 import itstime.shootit.greme.oauth.application.JwtTokenProvider;
 import itstime.shootit.greme.post.application.PostService;
 import itstime.shootit.greme.post.dto.request.ChangeReq;
+import itstime.shootit.greme.post.dto.request.DeletionReq;
 import itstime.shootit.greme.post.dto.response.GetShowPostRes;
 import itstime.shootit.greme.post.dto.request.CreationReq;
 import lombok.RequiredArgsConstructor;
@@ -72,6 +73,22 @@ public class PostController {
         postService에 s3Uploader을 선언하기에는 DDD에 어긋?
         추후 고민해보는 걸로...
         */
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @Operation(summary = "다이어리 삭제",
+            parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "성공"),
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class)))})
+    @DeleteMapping("")
+    public ResponseEntity<Void> delete(
+            @RequestBody DeletionReq deletionReq,
+            @RequestHeader("accessToken") String accessToken
+    ) {
+        postService.deleteIdAndEmail(deletionReq,jwtTokenProvider.getEmail(accessToken));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();

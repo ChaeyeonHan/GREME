@@ -3,7 +3,9 @@ package itstime.shootit.greme.post.infrastructure;
 import itstime.shootit.greme.post.domain.Post;
 import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.response.GetPostRes;
+import itstime.shootit.greme.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -20,4 +22,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(value = "SELECT p.image FROM Post p WHERE p.id=:post_id", nativeQuery = true)
     Optional<String> findImageById(@Param("post_id") Long post_id);
+
+    void deleteByIdAndUser(Long id, User user);
+
 }
