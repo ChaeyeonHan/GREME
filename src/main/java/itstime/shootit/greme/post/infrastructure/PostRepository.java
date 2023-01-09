@@ -3,17 +3,18 @@ package itstime.shootit.greme.post.infrastructure;
 import itstime.shootit.greme.post.domain.Post;
 
 import itstime.shootit.greme.post.dto.query.PostInfoQuery;
+
 import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.response.GetPostRes;
 import itstime.shootit.greme.post.dto.response.PostRes;
 import itstime.shootit.greme.user.domain.User;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
-import java.util.List;
 import java.util.Optional;
+import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT p.id,p.image,p.content,p.hashtag,p.status FROM post p " +
@@ -25,7 +26,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(value = "SELECT u.username, p.image, p.content, p.hashtag, p.createdDate FROM Post p LEFT OUTER JOIN User u on u.id = p.user_id WHERE p.id = :post_id", nativeQuery = true)
     GetPostSummaryRes findOnePost(Long post_id);
-
 
     @Query(value = "SELECT p.image FROM Post p WHERE p.id=:post_id", nativeQuery = true)
     Optional<String> findImageById(@Param("post_id") Long post_id);
