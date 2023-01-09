@@ -13,6 +13,7 @@ import itstime.shootit.greme.post.dto.request.DeletionReq;
 import itstime.shootit.greme.post.dto.response.AllPostRes;
 import itstime.shootit.greme.post.dto.response.GetShowPostRes;
 import itstime.shootit.greme.post.dto.request.CreationReq;
+import itstime.shootit.greme.post.dto.response.PostRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,18 @@ public class PostController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @Operation(summary = "날짜로 다이어리 조회",
+            parameters = {@Parameter(name = "date", description = "조회할 날짜 ex)2022-12-20"),
+                    @Parameter(name = "accessToken", description = "액세스 토큰")},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PostRes.class))),
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 다이어리", content = @Content(schema = @Schema(implementation = String.class)))
+    })
+    @GetMapping("{date}")
+    public PostRes getPost(@PathVariable("date") String date, @RequestHeader("accessToken") String accessToken) {
+        return postService.findByDate(date, jwtTokenProvider.getEmail(accessToken));
     }
 
     @Operation(summary = "다른 유저의 다이어리 조회하기", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),
