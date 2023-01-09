@@ -1,15 +1,19 @@
 package itstime.shootit.greme.post.application;
 
-import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
-import itstime.shootit.greme.challenge.domain.Challenge;
+
 import itstime.shootit.greme.challenge.domain.ChallengePost;
 import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
+import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
+
+import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.post.domain.Post;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeTitleRes;
 import itstime.shootit.greme.post.dto.request.ChangeReq;
 import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.response.GetShowPostRes;
 import itstime.shootit.greme.post.dto.request.CreationReq;
+
+import itstime.shootit.greme.post.dto.response.PostRes;
 import itstime.shootit.greme.post.exception.NotExistsPostException;
 import itstime.shootit.greme.post.infrastructure.PostRepository;
 import itstime.shootit.greme.user.domain.User;
@@ -56,7 +60,15 @@ public class PostService {
                 .collect(Collectors.toList()));
     }
 
-    public GetShowPostRes showPost(String email, Long post_id) {
+    public PostRes findByDate(String date, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        return postRepository.findPostByUserAndDate(user.getId(), date)
+                .orElseThrow(NotExistsPostException::new);
+    }
+
+    public GetShowPostRes showPost(String email, Long post_id){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
         GetChallengeTitleRes challengeTitle = challengePostRepository.findChallengeTitle(post_id);  // 해당 챌린지 title 가져오기
