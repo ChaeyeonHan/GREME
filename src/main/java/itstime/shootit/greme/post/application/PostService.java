@@ -1,14 +1,20 @@
 package itstime.shootit.greme.post.application;
 
-import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
-import itstime.shootit.greme.challenge.domain.Challenge;
+
 import itstime.shootit.greme.challenge.domain.ChallengePost;
 import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
+import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
+
+import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.post.domain.Post;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeTitleRes;
+import itstime.shootit.greme.post.dto.request.ChangeReq;
 import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.response.GetShowPostRes;
 import itstime.shootit.greme.post.dto.request.CreationReq;
+
+import itstime.shootit.greme.post.dto.response.PostRes;
+import itstime.shootit.greme.post.exception.NotExistsPostException;
 import itstime.shootit.greme.post.infrastructure.PostRepository;
 import itstime.shootit.greme.user.domain.User;
 import itstime.shootit.greme.user.exception.NotExistUserException;
@@ -54,6 +60,14 @@ public class PostService {
                 .collect(Collectors.toList()));
     }
 
+    public PostRes findByDate(String date, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        return postRepository.findPostByUserAndDate(user.getId(), date)
+                .orElseThrow(NotExistsPostException::new);
+    }
+
     public GetShowPostRes showPost(String email, Long post_id){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
@@ -68,5 +82,37 @@ public class PostService {
                 .hashtag(getPost.getHashtag())
                 .createdDate(getPost.getCreatedDate())
                 .challengeTitle(challengeTitle).build();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateById(ChangeReq changeReq, List<String> fileNames, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        Post post = postRepository.findById(changeReq.getPostId())
+                .orElseThrow(NotExistsPostException::new);
+
+        challengePostRepository.deleteTempByPostId(post); //기존에 등록된 챌린지 삭제
+
+        List<Challenge> challenges = challengeRepository.findAllById(changeReq.getChallenges()); //수정할 챌린지 조회
+
+        post.updateContent(changeReq.getContent());
+        post.updateHashtag(changeReq.getHashtag());
+        post.updateImage(fileNames.get(0));
+        post.updateStatus(changeReq.isStatus());
+        postRepository.save(post); //게시글 수정
+
+        challengePostRepository.saveAll(challenges.stream() //challenge에 post등록
+                .map(challenge -> ChallengePost.builder()
+                        .challenge(challenge)
+                        .post(post)
+                        .build())
+                .collect(Collectors.toList()));
+    }
+
+    @Transactional(readOnly = true)
+    public String findImageUrl(Long postId) {
+        return postRepository.findImageById(postId)
+                .orElseThrow(NotExistUserException::new);
     }
 }
