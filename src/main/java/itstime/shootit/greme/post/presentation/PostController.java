@@ -10,6 +10,7 @@ import itstime.shootit.greme.oauth.application.JwtTokenProvider;
 import itstime.shootit.greme.post.application.PostService;
 import itstime.shootit.greme.post.dto.request.ChangeReq;
 import itstime.shootit.greme.post.dto.request.DeletionReq;
+import itstime.shootit.greme.post.dto.response.AllPostRes;
 import itstime.shootit.greme.post.dto.response.GetShowPostRes;
 import itstime.shootit.greme.post.dto.request.CreationReq;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/post")
@@ -88,10 +92,20 @@ public class PostController {
             @RequestBody DeletionReq deletionReq,
             @RequestHeader("accessToken") String accessToken
     ) {
-        postService.deleteIdAndEmail(deletionReq,jwtTokenProvider.getEmail(accessToken));
+        postService.deleteIdAndEmail(deletionReq, jwtTokenProvider.getEmail(accessToken));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .build();
+    }
+
+    @Operation(summary = "전체 다이어리 조회", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = AllPostRes.class))),
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class)))})
+    @GetMapping("/all")//@RequestHeader("accessToken") String accessToken
+    public List<AllPostRes> getAllPost() {
+        //jwtTokenProvider.getEmail(accessToken)
+        return postService.findAllByEmail("ksiisk");
     }
 
 }

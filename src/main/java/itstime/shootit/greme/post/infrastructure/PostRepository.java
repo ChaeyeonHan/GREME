@@ -1,11 +1,11 @@
 package itstime.shootit.greme.post.infrastructure;
 
 import itstime.shootit.greme.post.domain.Post;
+import itstime.shootit.greme.post.dto.query.PostInfoQuery;
 import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.response.GetPostRes;
 import itstime.shootit.greme.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -25,4 +25,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     void deleteByIdAndUser(Long id, User user);
 
+    @Query(value = "SELECT p.id, p.image, date_format(p.created_date, '%Y-%m') as createdDate FROM Post p WHERE p.user_id=:user_id ORDER BY p.id DESC", nativeQuery = true)
+    List<PostInfoQuery> findAllByUserOrderByIdDesc(@Param("user_id") Long user_id);
 }
