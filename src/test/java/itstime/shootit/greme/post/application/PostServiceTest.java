@@ -2,6 +2,7 @@ package itstime.shootit.greme.post.application;
 
 
 import itstime.shootit.greme.post.domain.Post;
+import itstime.shootit.greme.post.dto.response.AllPostRes;
 import itstime.shootit.greme.post.dto.response.PostRes;
 import itstime.shootit.greme.post.infrastructure.PostRepository;
 import itstime.shootit.greme.user.domain.User;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,5 +59,43 @@ class PostServiceTest {
 
         //then
         assertEquals(true, postResponse.getStatus());
+    }
+
+    @Test
+    @DisplayName("전체 다이어리 조회")
+    void findAllPostByEmail(){
+        //given
+        User user = User.builder()
+                .username("test")
+                .email("email")
+                .build();
+        userRepository.save(user);
+
+        Post post = Post.builder()
+                .user(user)
+                .content("content")
+                .hashtag("hashtag")
+                .image("file")
+                .status(true)
+                .build();
+        postRepository.save(post);
+        Post post2 = Post.builder()
+                .user(user)
+                .content("content")
+                .hashtag("hashtag")
+                .image("file")
+                .status(true)
+                .build();
+        postRepository.save(post2);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+        String createdDate = simpleDateFormat.format(post.getCreatedDate());
+
+        //when
+        List<AllPostRes> allPosts= postService.findAllByEmail("email");
+
+        //then
+        assertEquals(createdDate,allPosts.get(0).getDate());
+        assertEquals(2, allPosts.get(0).getPostInfos().size());
     }
 }
