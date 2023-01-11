@@ -11,5 +11,5 @@ public class PostInfo {
     private Long id;
 
     @Schema(description = "이미지 url")
-    private String imageUrl;
+    private String image;
 }
