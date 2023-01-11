@@ -2,6 +2,9 @@ package itstime.shootit.greme.challenge.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import itstime.shootit.greme.challenge.application.ChallengeService;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeInfoRes;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
@@ -25,7 +28,10 @@ public class ChallengeController {
     private final ChallengeService challengeService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Operation(summary = "챌린지 메인 화면(총 3가지로 구분됨)", parameters = {@Parameter(name = "accessToken", description = "엑세스 토큰")})
+    @Operation(summary = "챌린지 메인 화면(총 3가지로 구분됨)", parameters = {@Parameter(name = "accessToken", description = "엑세스 토큰")},
+        responses = {
+            @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = GetChallengeInfoRes.class)))
+        })
     @GetMapping("/challenge")
     public GetChallengeInfoRes challengeMain(@RequestHeader("accessToken") String accessToken){
         return challengeService.challengeMain(jwtTokenProvider.getEmail(accessToken));

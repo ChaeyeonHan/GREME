@@ -64,6 +64,7 @@ public class ChallengeService {
                 .record(challengePostService.recordExist(user.getId()))  // 챌린지 참여 기록 있는지
                 .challengeSummary(challenge(user.getId()))  // 참여 가능 챌린지
                 .challengeJoinSummary(joinChallenge(user.getId())).build();
+//                .count().build();
 
     }
 
