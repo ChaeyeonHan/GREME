@@ -42,7 +42,7 @@ public class ChallengeService {
             throw new NotExistUserException();
         }
 
-        return challengeUserRepository.mfindChallenge(userId);
+        return challengeUserRepository.mfindChallenge(userId).get();
     }
 
     @Transactional(readOnly = true)
@@ -51,7 +51,7 @@ public class ChallengeService {
             throw new NotExistUserException();
         }
 
-        return challengeUserRepository.mfindJoinChallenge(userId);
+        return challengeUserRepository.mfindJoinChallenge(userId).get();
     }
 
     @Transactional(readOnly = true)
