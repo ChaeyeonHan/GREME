@@ -1,5 +1,6 @@
 package itstime.shootit.greme.challenge.application;
 
+import itstime.shootit.greme.challenge.dto.response.GetChallengeInfoRes;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeListRes;
 import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeUserRepository;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,12 +30,14 @@ public class ChallengeService {
 
     private final ChallengeUserRepository challengeUserRepository;
     private final ChallengeRepository challengeRepository;
-    private final ChallengePostRepository challengePostRepository;
+    private final ChallengePostRepository challengePostRepository;  // 이 부분 뺄 수 있게 수정해주기
+    private final ChallengePostService challengePostService;
+    private final ChallengeUserService challengeUserService;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
     @Transactional(readOnly = true)
-    public List<GetChallengeSummaryRes> challenge(Long userId){
+    public List<GetChallengeSummaryRes> challenge(Long userId){  // 참여 가능 챌린지 조회
         if (!userRepository.existsById(userId)) {
             throw new NotExistUserException();
         }
@@ -42,12 +46,25 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetChallengeSummaryRes> joinChallenge(Long userId){
+    public List<GetChallengeSummaryRes> joinChallenge(Long userId){  // 참여 중인 챌린지 조회
         if(!userRepository.existsById(userId)) {
             throw new NotExistUserException();
         }
 
         return challengeUserRepository.mfindJoinChallenge(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public GetChallengeInfoRes challengeMain(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        return GetChallengeInfoRes.builder()
+                .exist(challengeUserService.existsByUserId(user.getId()))  // 참여 중인 챌린지 있는지
+                .record(challengePostService.recordExist(user.getId()))  // 챌린지 참여 기록 있는지
+                .challengeSummary(challenge(user.getId()))  // 참여 가능 챌린지
+                .challengeJoinSummary(joinChallenge(user.getId())).build();
+
     }
 
     @Transactional(rollbackFor = Exception.class)

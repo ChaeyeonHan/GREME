@@ -3,6 +3,7 @@ package itstime.shootit.greme.challenge.presentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import itstime.shootit.greme.challenge.application.ChallengeService;
+import itstime.shootit.greme.challenge.dto.response.GetChallengeInfoRes;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import itstime.shootit.greme.oauth.application.JwtTokenProvider;
@@ -24,14 +25,10 @@ public class ChallengeController {
     private final ChallengeService challengeService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @GetMapping("/{userId}")
-    public List<GetChallengeSummaryRes> challenge(@PathVariable Long userId){
-        return challengeService.challenge(userId);
-    }
-
-    @GetMapping("/{userId}/join")
-    public List<GetChallengeSummaryRes> joinChallenge(@PathVariable Long userId){
-        return challengeService.joinChallenge(userId);
+    @Operation(summary = "챌린지 메인 화면(총 3가지로 구분됨)", parameters = {@Parameter(name = "accessToken", description = "엑세스 토큰")})
+    @GetMapping("/challenge")
+    public GetChallengeInfoRes challengeMain(@RequestHeader("accessToken") String accessToken){
+        return challengeService.challengeMain(jwtTokenProvider.getEmail(accessToken));
     }
 
     @Operation(summary = "챌린지 등록", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),
