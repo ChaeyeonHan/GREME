@@ -33,7 +33,22 @@ public class Post extends BaseEntity {
 
     private boolean status;  // 공개여부
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<ChallengePost> challengePosts;
 
+    public void updateImage(String image) {
+        this.image = image;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void updateHashtag(String hashtag) {
+        this.hashtag = hashtag;
+    }
+
+    public void updateStatus(boolean status) {
+        this.status = status;
+    }
 }
