@@ -56,8 +56,10 @@ public class ChallengeService {
 
     @Transactional(readOnly = true)
     public GetChallengeInfoRes challengeMain(String email){
+        System.out.println("challengeMain");
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
+        System.out.println(user.getUsername());
 
         return GetChallengeInfoRes.builder()
                 .exist(challengeUserService.existsByUserId(user.getId()))  // 참여 중인 챌린지 있는지
@@ -76,6 +78,7 @@ public class ChallengeService {
         if (challengeUserRepository.findByChallengeAndUser(user.getId(), challengeId) != null){  // 이미 챌린지 등록되어 있으면
             throw new FailAddChallengeException();
         }
+        System.out.println("챌린지 등록하기======================");
         challengeUserRepository.save(ChallengeUser.builder()
                 .challenge(challengeRepository.findById(challengeId).get())
                 .user(user)
