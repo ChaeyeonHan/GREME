@@ -153,4 +153,9 @@ public class PostService {
 
         return allPosts;
     }
+
+    @Transactional(readOnly = true)
+    public List<PostInfo> findBySearch(String search) {
+        return postRepository.findByContentContainingOrHashtagContaining(search, search);
+    }
 }
