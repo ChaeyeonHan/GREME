@@ -74,11 +74,9 @@ public class ChallengeService {
     public void addChallenge(String email, Long challengeId){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
-
-        if (challengeUserRepository.findByChallengeAndUser(user.getId(), challengeId) != null){  // 이미 챌린지 등록되어 있으면
+        if (challengeUserRepository.existsByChallengeIdAndUserId(challengeId, user.getId())){  // 이미 챌린지 등록되어 있으면
             throw new FailAddChallengeException();
         }
-        System.out.println("챌린지 등록하기======================");
         challengeUserRepository.save(ChallengeUser.builder()
                 .challenge(challengeRepository.findById(challengeId).get())
                 .user(user)
