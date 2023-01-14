@@ -40,7 +40,7 @@ public class ChallengeController {
     @Operation(summary = "챌린지 등록", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),
         @Parameter(name = "challengeId", description = "참여하려는 챌린지 id")}
     )
-    @PostMapping("/{challengeId}")
+    @PostMapping("/")
     public ResponseEntity<Void> addChallenge(@PathVariable Long challengeId, @RequestHeader("accessToken") String accessToken){
         challengeService.addChallenge(jwtTokenProvider.getEmail(accessToken), challengeId);
         return ResponseEntity
