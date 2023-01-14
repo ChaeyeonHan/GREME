@@ -87,7 +87,7 @@ public class ChallengeService {
     public void deleteChallenge(String email, Long challengeId){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
-        ChallengeUser challengeUserEntity = challengeUserRepository.findByChallengeAndUser(challengeId, user.getId());
+        ChallengeUser challengeUserEntity = challengeUserRepository.findByChallengeIdAndUserId(challengeId, user.getId());
 
         challengeUserRepository.delete(challengeUserEntity);
     }

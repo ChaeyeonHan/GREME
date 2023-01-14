@@ -20,10 +20,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "WHERE date_format(p.created_date, '%Y-%m-%d')=:date AND p.user_id=:userId", nativeQuery = true)
     Optional<PostRes> findPostByUserAndDate(@Param("userId") Long userId, @Param("date")String date);
 
-    @Query(value = "SELECT p.id, p.image FROM Post p WHERE p.user_id = :userId AND p.status = true ORDER BY p.createdDate DESC LIMIT 5;", nativeQuery = true)
+    @Query(value = "SELECT p.id, p.image FROM Post p WHERE p.user_id = :userId AND p.status = true ORDER BY p.created_date DESC LIMIT 5;", nativeQuery = true)
     List<GetPostRes> findRecentPostByUserEmail(Long userId);
 
-    @Query(value = "SELECT u.username, p.image, p.content, p.hashtag, p.createdDate FROM Post p LEFT OUTER JOIN User u on u.id = p.user_id WHERE p.id = :post_id", nativeQuery = true)
+    @Query(value = "SELECT u.username, p.image, p.content, p.hashtag, p.created_date FROM Post p LEFT OUTER JOIN User u on u.id = p.user_id WHERE p.id = :post_id", nativeQuery = true)
     GetPostSummaryRes findOnePost(Long post_id);
 
 }
