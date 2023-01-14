@@ -54,6 +54,7 @@ public class PostService {
                 .map(challenge -> ChallengePost.builder()
                         .challenge(challenge)
                         .post(post)
+                        .userId(user.getId())
                         .build())
                 .collect(Collectors.toList()));
     }
