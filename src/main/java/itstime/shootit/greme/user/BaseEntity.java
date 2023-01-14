@@ -17,11 +17,11 @@ import java.time.LocalDateTime;
 public class BaseEntity {
 
     @CreatedDate
-    @Column(nullable = false)
+    @Column(nullable = false, name = "created_date")
     private Timestamp createdDate;  // 생성 시간
 
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(nullable = false, name = "modified_date")
     private Timestamp modifiedDate;  // 최근 수정 시간
 
 }
