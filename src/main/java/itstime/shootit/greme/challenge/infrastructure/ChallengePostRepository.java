@@ -25,4 +25,5 @@ public interface ChallengePostRepository extends JpaRepository<ChallengePost, Lo
     void deleteTempByPostId(@Param("post") Post post);
 
     boolean existsByuserId(@Param("user_id") Long user_id);
+
 }

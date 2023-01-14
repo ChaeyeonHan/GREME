@@ -22,7 +22,7 @@ public interface ChallengeUserRepository extends JpaRepository<ChallengeUser, Lo
             "WHERE cu.user_id = :userId AND cu.created_date BETWEEN date_format(now(), '%Y-%m-01') AND date_format(now(), '%Y-%m-%d %H:%i:%s') ORDER BY c.deadline DESC;", nativeQuery = true)
     List<GetChallengeSummaryRes> findRecentJoinChallenge(Long userId);  // 이번달에 참여한 챌린지
 
-    ChallengeUser findByChallengeAndUser(Long challengeId, Long userId);  // 참여하는 챌린지인지
+    ChallengeUser findByChallengeIdAndUserId(Long challengeId, Long userId);  // 참여하는 챌린지인지
     boolean existsByChallengeIdAndUserId(Long challengeId, Long userId);  // 참여하는 챌린지인지
 
     @Query(value = "SELECT c.id, c.title FROM challenge c LEFT OUTER JOIN challenge_user cu on c.c_id = cu.challenge_id " +
