@@ -19,7 +19,7 @@ public interface ChallengeUserRepository extends JpaRepository<ChallengeUser, Lo
     List<GetChallengeSummaryRes> mfindJoinChallenge(Long userId);  // 참여 중인 챌린지
 
     @Query(value = "SELECT c.title, c.info, c.num, c.deadline FROM Challenge c LEFT OUTER JOIN ChallengeUser cu on c.id = cu.challenge_id " +
-            "WHERE cu.user_id = :userId AND cu.createdDate BETWEEN date_format(now(), '%Y-%m-01') AND date_format(now(), '%Y-%m-%d %H:%i:%s') ORDER BY c.deadline DESC;", nativeQuery = true)
+            "WHERE cu.user_id = :userId AND cu.created_date BETWEEN date_format(now(), '%Y-%m-01') AND date_format(now(), '%Y-%m-%d %H:%i:%s') ORDER BY c.deadline DESC;", nativeQuery = true)
     List<GetChallengeSummaryRes> findRecentJoinChallenge(Long userId);  // 이번달에 참여한 챌린지
 
     ChallengeUser findByChallengeAndUser(Long challengeId, Long userId);  // 참여하는 챌린지인지
