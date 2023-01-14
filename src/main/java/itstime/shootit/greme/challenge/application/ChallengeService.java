@@ -1,15 +1,12 @@
 package itstime.shootit.greme.challenge.application;
 
-import itstime.shootit.greme.challenge.dto.response.GetChallengeInfoRes;
-import itstime.shootit.greme.challenge.dto.response.GetChallengeListRes;
+import itstime.shootit.greme.challenge.dto.response.*;
 import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeUserRepository;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
 import itstime.shootit.greme.challenge.domain.ChallengeUser;
-import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import itstime.shootit.greme.challenge.exception.FailAddChallengeException;
-import itstime.shootit.greme.challenge.dto.response.ChallengeRes;
 import itstime.shootit.greme.post.dto.response.GetPostRes;
 import itstime.shootit.greme.post.infrastructure.PostRepository;
 import itstime.shootit.greme.user.domain.User;
@@ -132,5 +129,24 @@ public class ChallengeService {
                 .getChallengeLists(challengeList)
                 .summaryRes(challengeSummary).build();
 
+    }
+
+    @Transactional(readOnly = true)
+    public ChallengeMain getMain(String email, Long userId) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        boolean exist = challengePostRepository.existsByuserId(user.getId());  // 참여한 챌린지가 있는지 확인
+
+        if (exist) {  // 참여한 챌린지가 있다면, 그 중 마감기한 d-2~d+1 & 전체 참여 게시물이 가장 많은 데이터
+
+        } else {  // 조건에 맞는거 없다면, d-2~d+7 까지의 데이터 중 참여 게시물이 가장 많은 데이터
+
+        }
+
+        return ChallengeMain.builder()
+                .exist(exist)
+                .challengeTitle(null)
+                .thisWeekChallenge(null).build();
     }
 }
