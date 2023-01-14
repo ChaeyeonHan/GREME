@@ -14,6 +14,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "challenge")
 @Builder
 @Getter
 @Entity
