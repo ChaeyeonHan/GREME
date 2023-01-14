@@ -14,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "challenge_user")
 @Getter
 @Entity
 public class ChallengeUser extends BaseEntity {
