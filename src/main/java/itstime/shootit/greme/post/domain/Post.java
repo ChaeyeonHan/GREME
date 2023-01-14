@@ -37,4 +37,19 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post")
     private List<ChallengePost> challengePosts;
 
+    public void updateImage(String image) {
+        this.image = image;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void updateHashtag(String hashtag) {
+        this.hashtag = hashtag;
+    }
+
+    public void updateStatus(boolean status) {
+        this.status = status;
+    }
 }

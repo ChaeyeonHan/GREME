@@ -5,6 +5,6 @@ import itstime.shootit.greme.common.error.exception.BusinessException;
 
 public class NotExistsPostException extends BusinessException {
     public NotExistsPostException() {
-        super(ErrorMessage.NOT_EXISTS_POST);
+        super(ErrorMessage.NOT_EXIST_POST);
     }
 }
