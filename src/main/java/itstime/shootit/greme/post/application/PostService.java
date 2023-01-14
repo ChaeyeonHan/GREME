@@ -8,13 +8,17 @@ import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
 import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.post.domain.Post;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeTitleRes;
+import itstime.shootit.greme.post.dto.query.PostInfoQuery;
 import itstime.shootit.greme.post.dto.request.ChangeReq;
 import itstime.shootit.greme.post.dto.request.DeletionReq;
+import itstime.shootit.greme.post.dto.response.AllPostRes;
 import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.response.GetShowPostRes;
 import itstime.shootit.greme.post.dto.request.CreationReq;
 
+import itstime.shootit.greme.post.dto.response.PostInfo;
 import itstime.shootit.greme.post.dto.response.PostRes;
+
 import itstime.shootit.greme.post.exception.NotExistsPostException;
 import itstime.shootit.greme.post.infrastructure.PostRepository;
 import itstime.shootit.greme.user.domain.User;
@@ -24,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -123,5 +127,30 @@ public class PostService {
                 .orElseThrow(NotExistUserException::new);
 
         postRepository.deleteByIdAndUser(deletionReq.getId(), user);
+    }
+
+    public List<AllPostRes> findAllByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        List<PostInfoQuery> postInfoQueries = postRepository.findAllByUserOrderByIdDesc(user.getId()); //사용자가 쓴 최신 다이어리 조회
+
+        /*
+        받아온 사용자 다이어리들을
+        "2022-12":[{id,image}, {id2,image2}]
+        "2023-01":[{id3,image3}, {id4,image4}]
+        이런 구조로 변환시켜서 데이터를 응답함.
+         */
+        Map<String, List<PostInfo>> map = new LinkedHashMap<>();
+        for (PostInfoQuery postInfoQuery : postInfoQueries) {
+            String createdDate = postInfoQuery.getCreatedDate();
+            map.computeIfAbsent(createdDate, key -> new ArrayList<>())
+                    .add(new PostInfo(postInfoQuery.getId(), postInfoQuery.getImage()));
+        }
+
+        List<AllPostRes> allPosts = new ArrayList<>();
+        map.forEach((createdDate, postInfos) -> allPosts.add(new AllPostRes(createdDate, postInfos)));
+
+        return allPosts;
     }
 }

@@ -1,23 +1,20 @@
 package itstime.shootit.greme.post.infrastructure;
 
 import itstime.shootit.greme.post.domain.Post;
+
+import itstime.shootit.greme.post.dto.query.PostInfoQuery;
+
 import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.response.GetPostRes;
+import itstime.shootit.greme.post.dto.response.PostRes;
 import itstime.shootit.greme.user.domain.User;
 
-import itstime.shootit.greme.post.dto.response.PostRes;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
-
-import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
-import itstime.shootit.greme.post.dto.response.GetPostRes;
-
 import java.util.List;
-import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT p.id,p.image,p.content,p.hashtag,p.status FROM post p " +
@@ -34,5 +31,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<String> findImageById(@Param("post_id") Long post_id);
 
     void deleteByIdAndUser(Long id, User user);
+
+    @Query(value = "SELECT p.id, p.image, date_format(p.created_date, '%Y-%m') as createdDate FROM Post p WHERE p.user_id=:user_id ORDER BY p.id DESC", nativeQuery = true)
+    List<PostInfoQuery> findAllByUserOrderByIdDesc(@Param("user_id") Long user_id);
 
 }
