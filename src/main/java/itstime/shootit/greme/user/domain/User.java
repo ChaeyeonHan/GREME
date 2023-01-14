@@ -13,6 +13,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "`user`")
 @Builder
 @Getter
 @Entity
@@ -38,6 +39,7 @@ public class User extends BaseEntity {
 
     private String purpose;
 
+    @Column(name = "profile_img")
     private String profileImg;
 
     @OneToMany(mappedBy = "user")

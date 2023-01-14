@@ -11,6 +11,7 @@ import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "challenge_post")
 @Builder
 @Getter
 @Entity

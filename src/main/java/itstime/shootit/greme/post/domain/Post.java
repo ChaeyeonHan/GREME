@@ -13,6 +13,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "post")
 @Builder
 @Getter
 @Entity
