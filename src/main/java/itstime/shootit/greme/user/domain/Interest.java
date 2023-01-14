@@ -10,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "interest")
 @Getter
 @Entity
 public class Interest {
@@ -23,5 +24,6 @@ public class Interest {
     private User user;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "interest_type")
     private InterestType interestType;
 }

@@ -6,6 +6,9 @@ import java.util.Date;
 
 public interface GetChallengeSummaryRes {
 
+    @Schema(description = "챌린지 id값")
+    Long getId();
+
     @Schema(description = "챌린지 제목")
     String getTitle();
 
