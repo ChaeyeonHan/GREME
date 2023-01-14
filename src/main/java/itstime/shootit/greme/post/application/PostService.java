@@ -46,7 +46,8 @@ public class PostService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
 
-        List<Challenge> challenges = challengeRepository.findAllById(creationReq.getChallenges()); //게시글에 등록한 챌린지 조회
+        Challenge challenge = challengeRepository.findById(creationReq.getChallenge())
+                .orElseThrow(NotExistsPostException::new); //게시글에 등록한 챌린지 조회
 
         Post post = Post.builder()
                 .user(user)
@@ -57,12 +58,10 @@ public class PostService {
                 .build();
         postRepository.save(post); //게시글 저장
 
-        challengePostRepository.saveAll(challenges.stream() //challenge에 post등록
-                .map(challenge -> ChallengePost.builder()
-                        .challenge(challenge)
-                        .post(post)
-                        .build())
-                .collect(Collectors.toList()));
+        challengePostRepository.save(ChallengePost.builder()
+                .challenge(challenge)
+                .post(post)
+                .build());
     }
 
     public PostRes findByDate(String date, String email) {
@@ -73,7 +72,7 @@ public class PostService {
                 .orElseThrow(NotExistsPostException::new);
     }
 
-    public GetShowPostRes showPost(String email, Long post_id){
+    public GetShowPostRes showPost(String email, Long post_id) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
         GetChallengeTitleRes challengeTitle = challengePostRepository.findChallengeTitle(post_id);  // 해당 챌린지 title 가져오기
@@ -99,7 +98,8 @@ public class PostService {
 
         challengePostRepository.deleteTempByPostId(post); //기존에 등록된 챌린지 삭제
 
-        List<Challenge> challenges = challengeRepository.findAllById(changeReq.getChallenges()); //수정할 챌린지 조회
+        Challenge challenge = challengeRepository.findById(changeReq.getChallenge())
+                .orElseThrow(NotExistsPostException::new); //수정할 챌린지 조회
 
         post.updateContent(changeReq.getContent());
         post.updateHashtag(changeReq.getHashtag());
@@ -107,12 +107,9 @@ public class PostService {
         post.updateStatus(changeReq.isStatus());
         postRepository.save(post); //게시글 수정
 
-        challengePostRepository.saveAll(challenges.stream() //challenge에 post등록
-                .map(challenge -> ChallengePost.builder()
-                        .challenge(challenge)
-                        .post(post)
-                        .build())
-                .collect(Collectors.toList()));
+        challengePostRepository.save(ChallengePost.builder()
+                .challenge(challenge)
+                .post(post).build());
     }
 
     @Transactional(readOnly = true)

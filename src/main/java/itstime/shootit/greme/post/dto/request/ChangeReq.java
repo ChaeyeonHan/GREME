@@ -19,7 +19,7 @@ public class ChangeReq {
     private String hashtag;
 
     @Schema(description = "챌린지 고유 번호")
-    private List<Long> challenges;
+    private Long challenge;
 
     @Schema(description = "공개여부 true or false")
     private boolean status;
