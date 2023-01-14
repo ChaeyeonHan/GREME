@@ -1,6 +1,7 @@
 package itstime.shootit.greme.challenge.domain;
 
 import itstime.shootit.greme.challenge.domain.Challenge;
+import itstime.shootit.greme.post.domain.Post;
 import itstime.shootit.greme.user.BaseEntity;
 import itstime.shootit.greme.user.domain.User;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,5 @@ public class ChallengeUser extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
 
 }
