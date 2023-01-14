@@ -26,4 +26,7 @@ public class ChallengePost extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @Column(name = "user_id")
+    private Long userId;
 }

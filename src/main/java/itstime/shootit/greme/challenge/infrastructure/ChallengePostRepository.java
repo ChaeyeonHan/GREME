@@ -17,4 +17,6 @@ public interface ChallengePostRepository extends JpaRepository<ChallengePost, Lo
     @Query(value = "SELECT c.title FROM ChallengePost cp LEFT OUTER JOIN Challenge c on c.id = cp.challenge_id " +
             "LEFT OUTER JOIN Post p on p.id = cp.post_id WHERE p.id = :post_id", nativeQuery = true)
     GetChallengeTitleRes findChallengeTitle(Long post_id);
+
+    boolean existsByuserId(@Param("user_id") Long user_id);
 }
