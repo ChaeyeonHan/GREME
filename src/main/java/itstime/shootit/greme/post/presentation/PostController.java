@@ -40,17 +40,14 @@ public class PostController {
                     @ApiResponse(responseCode = "204", description = "성공"),
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class)))})
     @PostMapping("")
-    public ResponseEntity<Void> create(
+    public Long create(
             @RequestPart CreationReq creationReq,
             @RequestPart MultipartFile multipartFile,
             @RequestHeader("accessToken") String accessToken
     ) {
         List<String> fileNames = s3Uploader.uploadFile(List.of(multipartFile));
 
-        postService.create(creationReq, fileNames, jwtTokenProvider.getEmail(accessToken));
-        return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
-                .build();
+        return postService.create(creationReq, fileNames, jwtTokenProvider.getEmail(accessToken));
     }
 
     @Operation(summary = "날짜로 다이어리 조회",

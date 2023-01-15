@@ -40,7 +40,7 @@ public class PostService {
     private final ChallengePostRepository challengePostRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public void create(CreationReq creationReq, List<String> fileNames, String email) {
+    public Long create(CreationReq creationReq, List<String> fileNames, String email) {
         System.out.println("FILENAME: " + fileNames.get(0));
 
         User user = userRepository.findByEmail(email)
@@ -62,6 +62,8 @@ public class PostService {
                 .challenge(challenge)
                 .post(post)
                 .build());
+
+        return post.getId();
     }
 
     public PostRes findByDate(String date, String email) {
