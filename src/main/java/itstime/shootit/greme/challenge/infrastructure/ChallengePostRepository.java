@@ -21,7 +21,7 @@ public interface ChallengePostRepository extends JpaRepository<ChallengePost, Lo
     GetChallengeTitleRes findChallengeTitle(Long post_id);
 
     @Modifying
-    @Query(value = "DELETE FROM challenge_post cp WHERE cp.post=:post")
+    @Query(value = "DELETE FROM ChallengePost cp WHERE cp.post=:post")
     void deleteTempByPostId(@Param("post") Post post);
 
     boolean existsByuserId(@Param("user_id") Long user_id);
