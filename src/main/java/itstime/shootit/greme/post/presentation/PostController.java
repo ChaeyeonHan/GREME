@@ -115,6 +115,7 @@ public class PostController {
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class)))})
     @GetMapping("/all")
     public List<AllPostRes> getAllPost(@RequestHeader("accessToken") String accessToken) {
+        System.out.println("/post/all");
         return postService.findAllByEmail(jwtTokenProvider.getEmail(accessToken));
     }
 
