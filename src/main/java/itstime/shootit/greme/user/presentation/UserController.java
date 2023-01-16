@@ -93,4 +93,16 @@ public class UserController {
     }
 
 
+    @Operation(summary = "회원 탈퇴하기", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),
+            @Parameter(name = "userId", description = "유저 id값")})
+    @PatchMapping("{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("userId") Long userId, @RequestHeader("accessToken") String accessToken){
+        userService.deleteUser(jwtTokenProvider.getEmail(accessToken));
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+
+    }
+
+
 }

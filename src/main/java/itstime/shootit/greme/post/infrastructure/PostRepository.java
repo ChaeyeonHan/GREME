@@ -37,4 +37,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<PostInfoQuery> findAllByUserOrderByIdDesc(@Param("user_id") Long user_id);
 
     List<PostInfo> findByContentContainingOrHashtagContaining(String content, String hashtag);
+
+    List<Post> findAllByUser(User user);
+
 }

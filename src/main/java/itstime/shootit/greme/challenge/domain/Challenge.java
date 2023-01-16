@@ -35,19 +35,8 @@ public class Challenge extends BaseEntity {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     private List<ChallengeUser> challengeUsers;
 
-//    @Transient
-//    private int res;
-//
-//    public int calRes(Date date) throws ParseException {
-//        String todayFm = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()));  // 현재 날짜
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        Date Dday = new Date(String.valueOf(dateFormat.parse(String.valueOf(getDeadline().getTime()))));
-//        Date today = new Date(String.valueOf(dateFormat.parse(todayFm)));
-//
-//        long calculate = Dday.getTime() - today.getTime();
-//        int Days = (int) (calculate / (24*60*60*1000));
-//        System.out.println(Days);
-//        return Days;
-//    }
+    public void downNum() {
+        this.num -= 1;
+    }
 
 }

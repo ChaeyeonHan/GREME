@@ -25,12 +25,14 @@ import itstime.shootit.greme.user.domain.User;
 import itstime.shootit.greme.user.exception.NotExistUserException;
 import itstime.shootit.greme.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -157,4 +159,16 @@ public class PostService {
     public List<PostInfo> findBySearch(String search) {
         return postRepository.findByContentContainingOrHashtagContaining(search, search);
     }
+
+    @Transactional(readOnly = true)
+    public List<Post> getAllPosts(User user) {
+        return postRepository.findAllByUser(user);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteAllPosts(User user) {
+        postRepository.deleteAll(getAllPosts(user));
+        log.info("해당 유저의 다이어리가 모두 삭제되었습니다.");
+    }
+
 }
