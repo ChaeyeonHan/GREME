@@ -2,6 +2,7 @@ package itstime.shootit.greme.post.presentation;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -63,7 +64,11 @@ public class PostController {
     }
 
     @Operation(summary = "다른 유저의 다이어리 조회하기", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),
-            @Parameter(name = "postId", description = "조회하려는 다이어리 id")})
+            @Parameter(name = "postId", description = "조회하려는 다이어리 id")},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = GetShowPostRes.class))),
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class)))
+            })
     @GetMapping("/{postId}")
     public GetShowPostRes showPost(@PathVariable Long postId, @RequestHeader("accessToken") String accessToken) {
         return postService.showPost(jwtTokenProvider.getEmail(accessToken), postId);
@@ -111,7 +116,7 @@ public class PostController {
 
     @Operation(summary = "전체 다이어리 조회", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = AllPostRes.class))),
+                    @ApiResponse(responseCode = "200", description = "성공", content = @Content(array = @ArraySchema(schema = @Schema(implementation = AllPostRes.class)))),
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class)))})
     @GetMapping("/all")
     public List<AllPostRes> getAllPost(@RequestHeader("accessToken") String accessToken) {

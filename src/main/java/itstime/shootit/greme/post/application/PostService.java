@@ -148,10 +148,8 @@ public class PostService {
             map.computeIfAbsent(createdDate, key -> new ArrayList<>())
                     .add(new PostInfo(postInfoQuery.getId(), postInfoQuery.getImage()));
         }
-
         List<AllPostRes> allPosts = new ArrayList<>();
         map.forEach((createdDate, postInfos) -> allPosts.add(new AllPostRes(createdDate, postInfos)));
-
         return allPosts;
     }
 
