@@ -140,17 +140,14 @@ public class PostService {
         "2023-01":[{id3,image3}, {id4,image4}]
         이런 구조로 변환시켜서 데이터를 응답함.
          */
-        System.out.println("point");
         Map<String, List<PostInfo>> map = new LinkedHashMap<>();
         for (PostInfoQuery postInfoQuery : postInfoQueries) {
             String createdDate = postInfoQuery.getCreatedDate();
             map.computeIfAbsent(createdDate, key -> new ArrayList<>())
                     .add(new PostInfo(postInfoQuery.getId(), postInfoQuery.getImage()));
         }
-        System.out.println("point2");
         List<AllPostRes> allPosts = new ArrayList<>();
         map.forEach((createdDate, postInfos) -> allPosts.add(new AllPostRes(createdDate, postInfos)));
-        System.out.println("point3");
         return allPosts;
     }
 
