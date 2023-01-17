@@ -58,7 +58,7 @@ public class PostController {
                     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PostRes.class))),
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 다이어리", content = @Content(schema = @Schema(implementation = String.class)))
             })
-    @GetMapping("{date}")
+    @GetMapping("/date/{date}")
     public PostRes getPost(@PathVariable("date") String date, @RequestHeader("accessToken") String accessToken) {
         return postService.findByDate(date, jwtTokenProvider.getEmail(accessToken));
     }
