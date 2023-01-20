@@ -61,6 +61,7 @@ public class PostService {
         postRepository.save(post); //게시글 저장
 
         challengePostRepository.save(ChallengePost.builder()
+                .userId(user.getId())
                 .challenge(challenge)
                 .post(post)
                 .build());
