@@ -47,10 +47,10 @@ public class PostService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
-
+        log.info(email+" "+creationReq.getChallenge());
         Challenge challenge = challengeRepository.findById(creationReq.getChallenge())
                 .orElseThrow(NotExistsPostException::new); //게시글에 등록한 챌린지 조회
-        if(creationReq==null)log.info("request null");
+
         Post post = Post.builder()
                 .user(user)
                 .content(creationReq.getContent())
