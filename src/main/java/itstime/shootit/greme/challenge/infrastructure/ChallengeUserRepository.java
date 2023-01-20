@@ -23,6 +23,8 @@ public interface ChallengeUserRepository extends JpaRepository<ChallengeUser, Lo
     List<GetChallengeSummaryRes> findRecentJoinChallenge(Long userId);  // 이번달에 참여한 챌린지
 
     ChallengeUser findByChallengeIdAndUserId(Long challengeId, Long userId);  // 참여하는 챌린지인지
+
+    List<ChallengeUser> findAllByUserId(Long userId);
     boolean existsByChallengeIdAndUserId(Long challengeId, Long userId);  // 참여하는 챌린지인지
 
     @Query(value = "SELECT c.id, c.title FROM challenge c LEFT OUTER JOIN challenge_user cu on c.c_id = cu.challenge_id " +
