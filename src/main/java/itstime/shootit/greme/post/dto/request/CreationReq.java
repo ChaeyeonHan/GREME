@@ -21,5 +21,5 @@ public class CreationReq {
     private Long challenge;
 
     @Schema(description = "공개여부 true or false")
-    private Boolean status;
+    private boolean status;
 }
