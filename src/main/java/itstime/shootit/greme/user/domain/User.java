@@ -3,7 +3,6 @@ package itstime.shootit.greme.user.domain;
 import itstime.shootit.greme.challenge.domain.ChallengeUser;
 import itstime.shootit.greme.user.BaseEntity;
 import itstime.shootit.greme.user.Gender;
-import itstime.shootit.greme.user.exception.USER_ALREADY_DELETED;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

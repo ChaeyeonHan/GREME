@@ -13,7 +13,7 @@ import itstime.shootit.greme.user.dto.request.UserInfoReq;
 import itstime.shootit.greme.user.exception.ExistsUsernameException;
 import itstime.shootit.greme.user.exception.FailSignUpException;
 import itstime.shootit.greme.user.exception.NotExistUserException;
-import itstime.shootit.greme.user.exception.USER_ALREADY_DELETED;
+import itstime.shootit.greme.user.exception.UserAlreadyDeleted;
 import itstime.shootit.greme.user.infrastructure.InterestRepository;
 import itstime.shootit.greme.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -99,7 +98,7 @@ public class UserService {
             challengeRepository.numDeleted(allJoinId);  // 쿼리문으로 챌린지 인원 1씩 감소
             log.info("email : {} 유저가 탈퇴했습니다.", user.getEmail());
         } catch (Exception ignored) {
-            throw new USER_ALREADY_DELETED();
+            throw new UserAlreadyDeleted();
         }
     }
 
