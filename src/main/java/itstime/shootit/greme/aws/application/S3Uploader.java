@@ -45,8 +45,7 @@ public class S3Uploader {
             } catch(IOException e) {
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
             }
-
-            fileNameList.add(fileName);
+            fileNameList.add(amazonS3.getUrl(bucket, fileName).toString());
         });
 
         return fileNameList;
