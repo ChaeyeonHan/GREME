@@ -43,14 +43,14 @@ public class PostService {
 
     @Transactional(rollbackFor = Exception.class)
     public Long create(CreationReq creationReq, List<String> fileNames, String email) {
-        System.out.println("FILENAME: " + fileNames.get(0));
+        log.info("FILENAME: " + fileNames.get(0));
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
 
         Challenge challenge = challengeRepository.findById(creationReq.getChallenge())
                 .orElseThrow(NotExistsPostException::new); //게시글에 등록한 챌린지 조회
-
+        if(creationReq==null)log.info("request null");
         Post post = Post.builder()
                 .user(user)
                 .content(creationReq.getContent())
