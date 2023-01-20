@@ -133,4 +133,11 @@ public class ChallengeService {
                 .summaryRes(challengeSummary).build();
 
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void numDeleted(List<Long> challengeId) {
+        for (Long id : challengeId) {
+            challengeRepository.findById(id).get().downNum();  // 참여 인원 -1
+        }
+    }
 }
