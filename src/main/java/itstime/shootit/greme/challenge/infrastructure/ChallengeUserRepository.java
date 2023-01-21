@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface ChallengeUserRepository extends JpaRepository<ChallengeUser, Long> {
 
-    @Query(value = "SELECT c.id, c.title, c.info, c.num, c.deadline  FROM challenge c LEFT OUTER JOIN challenge_user cu on c.id = cu.challenge_id\n" +
+    @Query(value = "SELECT DISTINCT c.id, c.title, c.info, c.num, c.deadline  FROM challenge c LEFT OUTER JOIN challenge_user cu on c.id = cu.challenge_id\n" +
             "WHERE c.id NOT IN (SELECT cu.challenge_id FROM challenge_user cu WHERE cu.user_id = :userId) ORDER BY c.num DESC;", nativeQuery = true)
     List<GetChallengeSummaryRes> mfindChallenge(Long userId);  // 참여 가능 챌린지
 
-    @Query(value = "SELECT c.id, c.title, c.info, c.num, c.deadline FROM challenge c LEFT OUTER JOIN challenge_user cu on c.id = cu.challenge_id " +
+    @Query(value = "SELECT DISTINCT c.id, c.title, c.info, c.num, c.deadline FROM challenge c LEFT OUTER JOIN challenge_user cu on c.id = cu.challenge_id " +
             "WHERE cu.user_id = :userId ORDER BY c.deadline DESC;", nativeQuery = true)
     List<GetChallengeSummaryRes> mfindJoinChallenge(Long userId);  // 참여 중인 챌린지
 
