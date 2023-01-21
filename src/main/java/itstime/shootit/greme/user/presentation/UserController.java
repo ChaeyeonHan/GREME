@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -94,7 +95,7 @@ public class UserController {
     @Operation(summary = "회원 탈퇴하기", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),
             @Parameter(name = "userId", description = "유저 id값")})
     @PatchMapping("{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("userId") Long userId, @RequestHeader("accessToken") String accessToken){
+    public ResponseEntity<Void> deleteUser(@PathVariable("userId") Long userId, @RequestHeader("accessToken") String accessToken) {
         userService.deleteUser(jwtTokenProvider.getEmail(accessToken));
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
@@ -136,5 +137,20 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
+    }
+
+    @Operation(summary = "프로필 이미지 밴경",
+            parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "이미지 경로", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class))),
+            }
+    )
+    @PatchMapping("/profile-image")
+    public String updateProfileImage(
+            @RequestHeader("accessToken") String accessToken,
+            @RequestPart(value = "multipartFile") MultipartFile multipartFile
+    ) {
+        return userService.updateProfileImage(jwtTokenProvider.getEmail(accessToken), multipartFile);
     }
 }
