@@ -48,25 +48,25 @@ public class User extends BaseEntity {
     private Boolean activated;
 
     public void updateGender(Integer genderType) {
-        switch (genderType){
+        switch (genderType) {
             case 0:
-                gender=Gender.MALE;
+                gender = Gender.MALE;
                 return;
             case 1:
-                gender=Gender.FEMALE;
+                gender = Gender.FEMALE;
                 return;
             case 2:
-                gender=Gender.ANYTHING;
+                gender = Gender.ANYTHING;
                 return;
         }
     }
 
-    public void updateArea(String area){
-        this.area=area;
+    public void updateArea(String area) {
+        this.area = area;
     }
 
-    public void updatePurpose(String purpose){
-        this.purpose=purpose;
+    public void updatePurpose(String purpose) {
+        this.purpose = purpose;
     }
 
     public User setActiveFalse() throws Exception {
@@ -77,4 +77,7 @@ public class User extends BaseEntity {
         return this;
     }
 
+    public void updateUsername(String username) {
+        this.username = username;
+    }
 }

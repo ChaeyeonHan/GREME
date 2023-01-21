@@ -11,6 +11,7 @@ import itstime.shootit.greme.common.error.exception.BusinessException;
 import itstime.shootit.greme.oauth.application.JwtTokenProvider;
 import itstime.shootit.greme.user.application.UserService;
 import itstime.shootit.greme.user.dto.request.InterestReq;
+import itstime.shootit.greme.user.dto.request.Profile1Req;
 import itstime.shootit.greme.user.dto.request.SignUpReq;
 import itstime.shootit.greme.user.dto.request.UserInfoReq;
 import lombok.RequiredArgsConstructor;
@@ -104,5 +105,21 @@ public class UserController {
 
     }
 
-
+    @Operation(summary = "프로필 수정1",
+            parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "성공"),
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class))),
+            }
+    )
+    @PatchMapping("/profile1")
+    public ResponseEntity<Void> updateProfile1(
+            @RequestHeader("accessToken") String accessToken,
+            @RequestBody Profile1Req profile1Req
+    ) {
+        userService.updateProfile1(jwtTokenProvider.getEmail(accessToken), profile1Req);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }
