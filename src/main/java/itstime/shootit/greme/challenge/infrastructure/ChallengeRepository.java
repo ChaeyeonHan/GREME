@@ -24,7 +24,7 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     @Query(value = "SELECT c.id FROM challenge c INNER JOIN challenge_user cu ON c.id=cu.challenge_id WHERE cu.user_id=:userId ORDER BY c.id DESC", nativeQuery = true)
     List<Long> findParticipatingChallenge(@Param("userId") Long userId);
 
-    @Query(value = "SELECT c.id, c.title FROM challenge c INNER JOIN challenge_post cp ON c.id=cp.challenge_id GROUP BY cp.challenge_id ORDER BY COUNT(cp.id) DESC LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT c.id, c.title FROM challenge c LEFT JOIN challenge_post cp ON c.id=cp.challenge_id GROUP BY cp.challenge_id ORDER BY COUNT(cp.id) DESC LIMIT 1", nativeQuery = true)
     ChallengeTitle findPopularityChallenge();
 
     @Query(value = "SELECT c.id, c.title FROM challenge c INNER JOIN challenge_post cp ON c.id=cp.challenge_id WHERE cp.challenge_id IN :myChallenges GROUP BY cp.challenge_id ORDER BY COUNT(cp.id) DESC LIMIT 1", nativeQuery = true)
