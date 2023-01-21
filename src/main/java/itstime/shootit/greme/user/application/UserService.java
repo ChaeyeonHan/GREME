@@ -3,12 +3,14 @@ package itstime.shootit.greme.user.application;
 import itstime.shootit.greme.aws.application.S3Uploader;
 import itstime.shootit.greme.challenge.application.ChallengeService;
 import itstime.shootit.greme.challenge.application.ChallengeUserService;
+import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
 import itstime.shootit.greme.post.application.PostService;
 import itstime.shootit.greme.user.domain.Interest;
 import itstime.shootit.greme.user.domain.InterestType;
 import itstime.shootit.greme.user.domain.User;
 import itstime.shootit.greme.user.dto.request.*;
+import itstime.shootit.greme.user.dto.response.ConfigurationRes;
 import itstime.shootit.greme.user.exception.ExistsUsernameException;
 import itstime.shootit.greme.user.exception.FailSignUpException;
 import itstime.shootit.greme.user.exception.NotExistUserException;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -144,5 +147,19 @@ public class UserService {
         user.updateProfileImage(fileNames.get(0));
 
         return fileNames.get(0);
+    }
+
+    public ConfigurationRes findConfiguration(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        return ConfigurationRes.builder()
+                .username(user.getUsername())
+                .imageUrl(user.getProfileImg())
+                .challengeJoinSummary(
+                        challengeRepository.findMonthJoinChallenge(user.getId())
+                                .orElseGet(ArrayList::new)
+                )
+                .build();
     }
 }

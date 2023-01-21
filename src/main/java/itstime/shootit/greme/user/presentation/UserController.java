@@ -11,6 +11,7 @@ import itstime.shootit.greme.common.error.exception.BusinessException;
 import itstime.shootit.greme.oauth.application.JwtTokenProvider;
 import itstime.shootit.greme.user.application.UserService;
 import itstime.shootit.greme.user.dto.request.*;
+import itstime.shootit.greme.user.dto.response.ConfigurationRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -151,5 +152,19 @@ public class UserController {
             @RequestPart(value = "multipartFile") MultipartFile multipartFile
     ) {
         return userService.updateProfileImage(jwtTokenProvider.getEmail(accessToken), multipartFile);
+    }
+
+    @Operation(summary = "환경설정",
+            parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "환경설정 첫 페이지에 대한 데이터", content = @Content(schema = @Schema(implementation = ConfigurationRes.class))),
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class))),
+            }
+    )
+    @GetMapping("")
+    public ConfigurationRes getConfiguration(
+            @RequestHeader("accessToken") String accessToken
+    ) {
+        return userService.findConfiguration(jwtTokenProvider.getEmail(accessToken));
     }
 }

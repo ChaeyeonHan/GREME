@@ -35,4 +35,8 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
     @Query(value = "SELECT c.id FROM challenge c ORDER BY c.id DESC LIMIT 1", nativeQuery = true)
     Long findCurrentChallengeId();
+
+    @Query(value = "SELECT c.id, c.title, c.info, c.num, c.deadline FROM challenge c INNER JOIN challenge_user cu on c.id = cu.challenge_id " +
+            "WHERE cu.user_id = :userId AND MONTH(cu.created_date) = MONTH(CURRENT_DATE()) AND YEAR(cu.created_date)=YEAR(CURRENT_DATE()) ORDER BY c.deadline DESC;", nativeQuery = true)
+    Optional<List<GetChallengeSummaryRes>> findMonthJoinChallenge(@Param("userId") Long userId);
 }
