@@ -12,6 +12,7 @@ import itstime.shootit.greme.oauth.application.JwtTokenProvider;
 import itstime.shootit.greme.user.application.UserService;
 import itstime.shootit.greme.user.dto.request.*;
 import itstime.shootit.greme.user.dto.response.ConfigurationRes;
+import itstime.shootit.greme.user.dto.response.ProfileRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -166,5 +167,19 @@ public class UserController {
             @RequestHeader("accessToken") String accessToken
     ) {
         return userService.findConfiguration(jwtTokenProvider.getEmail(accessToken));
+    }
+
+    @Operation(summary = "프로필 조회",
+            parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "환경설정 첫 페이지에 대한 데이터", content = @Content(schema = @Schema(implementation = ProfileRes.class))),
+                    @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class))),
+            }
+    )
+    @GetMapping("/profile")
+    public ProfileRes getProfile(
+            @RequestHeader("accessToken") String accessToken
+    ) {
+        return userService.findProfile(jwtTokenProvider.getEmail(accessToken));
     }
 }

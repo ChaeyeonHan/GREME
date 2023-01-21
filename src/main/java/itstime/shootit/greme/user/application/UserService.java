@@ -11,6 +11,7 @@ import itstime.shootit.greme.user.domain.InterestType;
 import itstime.shootit.greme.user.domain.User;
 import itstime.shootit.greme.user.dto.request.*;
 import itstime.shootit.greme.user.dto.response.ConfigurationRes;
+import itstime.shootit.greme.user.dto.response.ProfileRes;
 import itstime.shootit.greme.user.exception.ExistsUsernameException;
 import itstime.shootit.greme.user.exception.FailSignUpException;
 import itstime.shootit.greme.user.exception.NotExistUserException;
@@ -160,6 +161,28 @@ public class UserService {
                         challengeRepository.findMonthJoinChallenge(user.getId())
                                 .orElseGet(ArrayList::new)
                 )
+                .build();
+    }
+
+    public ProfileRes findProfile(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        List<Interest> interest = user.getInterest();
+
+        List<Integer> interestType = interest.stream() //관심사 enum index로 저장
+                .map(Interest::getInterestType)
+                .mapToInt(Enum::ordinal)
+                .boxed()
+                .collect(Collectors.toList());
+
+        return ProfileRes.builder()
+                .username(user.getUsername())
+                .imageUrl(user.getProfileImg())
+                .interestType(interestType)
+                .genderType(user.getGender().ordinal())
+                .area(user.getArea())
+                .purpose(user.getPurpose())
                 .build();
     }
 }
