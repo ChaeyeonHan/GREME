@@ -1,15 +1,12 @@
 package itstime.shootit.greme.challenge.application;
 
-import itstime.shootit.greme.challenge.dto.response.GetChallengeInfoRes;
-import itstime.shootit.greme.challenge.dto.response.GetChallengeListRes;
+import itstime.shootit.greme.challenge.dto.response.*;
 import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeUserRepository;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
 import itstime.shootit.greme.challenge.domain.ChallengeUser;
-import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import itstime.shootit.greme.challenge.exception.FailAddChallengeException;
-import itstime.shootit.greme.challenge.dto.response.ChallengeRes;
 import itstime.shootit.greme.post.dto.response.GetPostRes;
 import itstime.shootit.greme.post.infrastructure.PostRepository;
 import itstime.shootit.greme.user.domain.User;
@@ -139,5 +136,28 @@ public class ChallengeService {
         for (Long id : challengeId) {
             challengeRepository.findById(id).get().downNum();  // 참여 인원 -1
         }
+    }
+
+    @Transactional(readOnly = true)
+    public ChallengeMain getMain(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        ChallengeTitle popularityChallenge = challengeRepository.findPopularityChallenge(); //사실상 참여 중인 챌린지가 없다면 전체 인기 챌린지랑 쿼리문이 동일하다.
+        List<Long> myChallenges = challengeRepository.findParticipatingChallenge(user.getId()); //사용자고 참여하고 있는 챌린지 조회
+
+        if(myChallenges==null){ //참여중인 챌린지가 없다면
+            return ChallengeMain.builder()
+                    .exist(false)
+                    .participatingChallenge(challengeRepository.findPopularityChallenge())
+                    .popularityChallenge(popularityChallenge)
+                    .build();
+        }
+
+        return ChallengeMain.builder()
+                .exist(true)
+                .participatingChallenge(challengeRepository.findParticipatingPopularityChallenge(myChallenges))
+                .popularityChallenge(popularityChallenge)
+                .build();
     }
 }

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import itstime.shootit.greme.challenge.application.ChallengeService;
+import itstime.shootit.greme.challenge.dto.response.ChallengeMain;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeInfoRes;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.dto.ChallengeTitle;
@@ -77,6 +78,12 @@ public class ChallengeController {
     public ChallengeRes showChallengeList(@PathVariable Long challengeId, @RequestHeader("accessToken") String accessToken){
         return challengeService.showChallengeList(jwtTokenProvider.getEmail(accessToken), challengeId);
 
+    }
+
+    @Operation(summary = "홈 피드 메인화면", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),})
+    @GetMapping("/home")
+    public ChallengeMain home(@RequestHeader("accessToken") String accessToken){
+        return challengeService.getMain(jwtTokenProvider.getEmail(accessToken));
     }
 
 }
