@@ -86,4 +86,9 @@ public class ChallengeController {
         return challengeService.getMain(jwtTokenProvider.getEmail(accessToken));
     }
 
+    @Operation(summary = "인기챌린지", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰"),})
+    @GetMapping("/popularity")
+    public ChallengeRes popularityChallenge(@RequestHeader("accessToken") String accessToken){
+        return challengeService.getPopularityChallenge(jwtTokenProvider.getEmail(accessToken));
+    }
 }

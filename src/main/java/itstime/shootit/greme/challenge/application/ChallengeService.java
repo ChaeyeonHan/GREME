@@ -34,7 +34,7 @@ public class ChallengeService {
     private final PostRepository postRepository;
 
     @Transactional(readOnly = true)
-    public List<GetChallengeSummaryRes> challenge(Long userId){  // 참여 가능 챌린지 조회
+    public List<GetChallengeSummaryRes> challenge(Long userId) {  // 참여 가능 챌린지 조회
         if (!userRepository.existsById(userId)) {
             throw new NotExistUserException();
         }
@@ -43,8 +43,8 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetChallengeSummaryRes> joinChallenge(Long userId){  // 참여 중인 챌린지 조회
-        if(!userRepository.existsById(userId)) {
+    public List<GetChallengeSummaryRes> joinChallenge(Long userId) {  // 참여 중인 챌린지 조회
+        if (!userRepository.existsById(userId)) {
             throw new NotExistUserException();
         }
 
@@ -52,7 +52,7 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public GetChallengeInfoRes challengeMain(String email){
+    public GetChallengeInfoRes challengeMain(String email) {
         System.out.println("challengeMain");
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
@@ -68,10 +68,10 @@ public class ChallengeService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void addChallenge(String email, Long challengeId){
+    public void addChallenge(String email, Long challengeId) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
-        if (challengeUserRepository.existsByChallengeIdAndUserId(challengeId, user.getId())){  // 이미 챌린지 등록되어 있으면
+        if (challengeUserRepository.existsByChallengeIdAndUserId(challengeId, user.getId())) {  // 이미 챌린지 등록되어 있으면
             throw new FailAddChallengeException();
         }
         challengeUserRepository.save(ChallengeUser.builder()
@@ -81,7 +81,7 @@ public class ChallengeService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deleteChallenge(String email, Long challengeId){
+    public void deleteChallenge(String email, Long challengeId) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
         ChallengeUser challengeUserEntity = challengeUserRepository.findByChallengeIdAndUserId(challengeId, user.getId());
@@ -98,7 +98,7 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public GetProfileRes showUserProfile(String email, Long user_id){
+    public GetProfileRes showUserProfile(String email, Long user_id) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
 
@@ -114,7 +114,7 @@ public class ChallengeService {
     }
 
     @Transactional(readOnly = true)
-    public ChallengeRes showChallengeList(String email, Long challenge_id){
+    public ChallengeRes showChallengeList(String email, Long challenge_id) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
 
@@ -146,7 +146,7 @@ public class ChallengeService {
         ChallengeTitle popularityChallenge = challengeRepository.findPopularityChallenge(); //사실상 참여 중인 챌린지가 없다면 전체 인기 챌린지랑 쿼리문이 동일하다.
         List<Long> myChallenges = challengeRepository.findParticipatingChallenge(user.getId()); //사용자고 참여하고 있는 챌린지 조회
 
-        if(myChallenges==null){ //참여중인 챌린지가 없다면
+        if (myChallenges == null) { //참여중인 챌린지가 없다면
             return ChallengeMain.builder()
                     .exist(false)
                     .participatingChallenge(challengeRepository.findPopularityChallenge())
@@ -159,5 +159,27 @@ public class ChallengeService {
                 .participatingChallenge(challengeRepository.findParticipatingPopularityChallenge(myChallenges))
                 .popularityChallenge(popularityChallenge)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public ChallengeRes getPopularityChallenge(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        Long popularityChallengeId = challengeRepository.findPopularityChallengeId(); //가장 만은 참여 챌린지 조회
+        Long challengeId = popularityChallengeId;
+        if (popularityChallengeId == null) { //참여한 사람이 없을 경우 최근 챌린지 조회
+            challengeId = challengeRepository.findCurrentChallengeId();
+        }
+
+        boolean status = challengeUserRepository.existsByChallengeIdAndUserId(challengeId, user.getId());  // 해당 챌린지에 참여하는지
+        List<GetChallengeListRes> challengeList = challengePostRepository.findAllImageByChallengeId(challengeId);  // 챌린지 참여 목록
+
+        GetChallengeSummaryRes challengeSummary = challengeRepository.findById(challengeId, GetChallengeSummaryRes.class); // 해당 챌린지 정보
+
+        return ChallengeRes.builder()
+                .status(status)
+                .getChallengeLists(challengeList)
+                .summaryRes(challengeSummary).build();
     }
 }
