@@ -113,7 +113,6 @@ public class UserService {
                 .orElseThrow(NotExistUserException::new);
 
         user.updateGender(profile1Req.getGenderType());
-        user.updateUsername(profile1Req.getUsername());
 
         interestRepository.deleteInterestsByUser(user); //사용자의 기존 관심사 삭제
         interestRepository.saveAll(profile1Req.getInterestType() //모든 관심사 저장
@@ -123,8 +122,6 @@ public class UserService {
                         .interestType(InterestType.fromValue(interest))
                         .build())
                 .collect(Collectors.toList()));
-
-        userRepository.save(user);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -134,8 +131,6 @@ public class UserService {
 
         user.updatePurpose(profile2Req.getPurpose());
         user.updateArea(profile2Req.getArea());
-
-        userRepository.save(user);
     }
 
     @Transactional(rollbackFor = Exception.class)
