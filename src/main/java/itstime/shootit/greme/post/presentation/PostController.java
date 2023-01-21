@@ -17,6 +17,7 @@ import itstime.shootit.greme.post.dto.request.CreationReq;
 import itstime.shootit.greme.post.dto.response.PostInfo;
 import itstime.shootit.greme.post.dto.response.PostRes;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,13 +43,16 @@ public class PostController {
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class)))})
     @PostMapping("")
     public Long create(
-            @RequestPart CreationReq creationReq,
-            @RequestPart MultipartFile multipartFile,
+            @RequestPart(value = "content") String content,
+            @RequestPart(value = "hashtag") String hashtag,
+            @RequestPart(value = "challenge") Long challenge,
+            @RequestPart(value = "status") Boolean status,
+            @RequestPart(value = "multipartFile") MultipartFile multipartFile,
             @RequestHeader("accessToken") String accessToken
     ) {
         List<String> fileNames = s3Uploader.uploadFile(List.of(multipartFile));
 
-        return postService.create(creationReq, fileNames, jwtTokenProvider.getEmail(accessToken));
+        return postService.create(new CreationReq(content, hashtag, challenge, status), fileNames, jwtTokenProvider.getEmail(accessToken));
     }
 
     @Operation(summary = "날짜로 다이어리 조회",
@@ -58,7 +62,7 @@ public class PostController {
                     @ApiResponse(responseCode = "200", description = "성공", content = @Content(schema = @Schema(implementation = PostRes.class))),
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 다이어리", content = @Content(schema = @Schema(implementation = String.class)))
             })
-    @GetMapping("{date}")
+    @GetMapping("/date/{date}")
     public PostRes getPost(@PathVariable("date") String date, @RequestHeader("accessToken") String accessToken) {
         return postService.findByDate(date, jwtTokenProvider.getEmail(accessToken));
     }
@@ -81,9 +85,14 @@ public class PostController {
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자 또는 다이어리", content = @Content(schema = @Schema(implementation = String.class)))})
     @PutMapping("")
     public ResponseEntity<Void> update(
-            @RequestPart ChangeReq changeReq,
-            @RequestPart MultipartFile multipartFile,
+            @RequestPart(value = "postId") Long postId,
+            @RequestPart(value = "content") String content,
+            @RequestPart(value = "hashtag") String hashtag,
+            @RequestPart(value = "challenge") Long challenge,
+            @RequestPart(value = "status") Boolean status,
+            @RequestPart(value = "multipartFile") MultipartFile multipartFile,
             @RequestHeader("accessToken") String accessToken) {
+        ChangeReq changeReq = new ChangeReq(postId, content, hashtag, challenge, status);
         String imageUrl = postService.findImageUrl(changeReq.getPostId()); //기존 이미지 조회
         List<String> fileNames = s3Uploader.uploadFile(List.of(multipartFile)); //수정할 이미지 업로드
         postService.updateById(changeReq, fileNames, jwtTokenProvider.getEmail(accessToken)); //post 수정

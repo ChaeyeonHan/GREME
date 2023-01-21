@@ -45,7 +45,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<ChallengeUser> challengeUsers;
 
-    private boolean activated;
+    private Boolean activated;
 
     public void updateGender(Integer genderType) {
         switch (genderType){
