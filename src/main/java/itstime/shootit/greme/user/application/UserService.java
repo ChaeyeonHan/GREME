@@ -8,6 +8,7 @@ import itstime.shootit.greme.user.domain.Interest;
 import itstime.shootit.greme.user.domain.InterestType;
 import itstime.shootit.greme.user.domain.User;
 import itstime.shootit.greme.user.dto.request.InterestReq;
+import itstime.shootit.greme.user.dto.request.Profile1Req;
 import itstime.shootit.greme.user.dto.request.SignUpReq;
 import itstime.shootit.greme.user.dto.request.UserInfoReq;
 import itstime.shootit.greme.user.exception.ExistsUsernameException;
@@ -102,4 +103,23 @@ public class UserService {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void updateProfile1(String email, Profile1Req profile1Req) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        user.updateGender(profile1Req.getGenderType());
+        user.updateUsername(profile1Req.getUsername());
+
+        interestRepository.deleteInterestsByUser(user); //사용자의 기존 관심사 삭제
+        interestRepository.saveAll(profile1Req.getInterestType() //모든 관심사 저장
+                .stream()
+                .map(interest -> Interest.builder()
+                        .user(user)
+                        .interestType(InterestType.fromValue(interest))
+                        .build())
+                .collect(Collectors.toList()));
+
+        userRepository.save(user);
+    }
 }
