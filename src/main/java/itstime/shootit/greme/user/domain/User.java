@@ -80,4 +80,8 @@ public class User extends BaseEntity {
     public void updateUsername(String username) {
         this.username = username;
     }
+
+    public void updateProfileImage(String profileImg) {
+        this.profileImg = profileImg;
+    }
 }

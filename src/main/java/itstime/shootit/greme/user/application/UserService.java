@@ -1,5 +1,6 @@
 package itstime.shootit.greme.user.application;
 
+import itstime.shootit.greme.aws.application.S3Uploader;
 import itstime.shootit.greme.challenge.application.ChallengeService;
 import itstime.shootit.greme.challenge.application.ChallengeUserService;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +34,7 @@ public class UserService {
     private final PostService postService;
     private final ChallengeUserService challengeUserService;
     private final ChallengeService challengeService;
+    private final S3Uploader s3Uploader;
 
     public void checkExistsUsername(String username) {
         if (userRepository.existsByUsername(username)) {
@@ -129,5 +132,17 @@ public class UserService {
         user.updateArea(profile2Req.getArea());
 
         userRepository.save(user);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public String updateProfileImage(String email, MultipartFile multipartFile) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        List<String> fileNames = s3Uploader.uploadFile(List.of(multipartFile));
+
+        user.updateProfileImage(fileNames.get(0));
+
+        return fileNames.get(0);
     }
 }
