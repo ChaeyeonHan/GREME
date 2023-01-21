@@ -7,10 +7,7 @@ import itstime.shootit.greme.post.application.PostService;
 import itstime.shootit.greme.user.domain.Interest;
 import itstime.shootit.greme.user.domain.InterestType;
 import itstime.shootit.greme.user.domain.User;
-import itstime.shootit.greme.user.dto.request.InterestReq;
-import itstime.shootit.greme.user.dto.request.Profile1Req;
-import itstime.shootit.greme.user.dto.request.SignUpReq;
-import itstime.shootit.greme.user.dto.request.UserInfoReq;
+import itstime.shootit.greme.user.dto.request.*;
 import itstime.shootit.greme.user.exception.ExistsUsernameException;
 import itstime.shootit.greme.user.exception.FailSignUpException;
 import itstime.shootit.greme.user.exception.NotExistUserException;
@@ -119,6 +116,17 @@ public class UserService {
                         .interestType(InterestType.fromValue(interest))
                         .build())
                 .collect(Collectors.toList()));
+
+        userRepository.save(user);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateProfile2(String email, Profile2Req profile2Req) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(NotExistUserException::new);
+
+        user.updatePurpose(profile2Req.getPurpose());
+        user.updateArea(profile2Req.getArea());
 
         userRepository.save(user);
     }
