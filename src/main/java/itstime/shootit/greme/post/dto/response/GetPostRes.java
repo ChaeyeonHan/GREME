@@ -8,6 +8,6 @@ public interface GetPostRes {
     Long getId();
 
     @Schema(description = "다이어리 사진")
-    String image();
+    String getImage();
 
 }
