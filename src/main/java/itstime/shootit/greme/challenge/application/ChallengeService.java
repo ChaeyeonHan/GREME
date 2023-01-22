@@ -101,13 +101,14 @@ public class ChallengeService {
     public GetProfileRes showUserProfile(String email, Long user_id) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
-
+        User user1 = userRepository.findById(user_id)
+                .orElseThrow(NotExistUserException::new);
         List<GetChallengeSummaryRes> getChallengeSummaryRes = challengeUserRepository.findRecentJoinChallenge(user_id); // 이번달에 참여한 챌린지 가져오기
         List<GetPostRes> postRes = postRepository.findRecentPostByUserEmail(user_id);  // 가장 최근에 작성된 post 6개
 
         return GetProfileRes.builder()
                 .profileImg(user.getProfileImg())
-                .username(user.getUsername())
+                .username(user1.getUsername())
                 .challengeSummary(getChallengeSummaryRes)
                 .postRes(postRes).build();
 
