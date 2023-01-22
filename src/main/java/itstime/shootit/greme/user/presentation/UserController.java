@@ -143,16 +143,19 @@ public class UserController {
     @Operation(summary = "프로필 이미지 밴경",
             parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")},
             responses = {
-                    @ApiResponse(responseCode = "200", description = "이미지 경로", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "204", description = "성공"),
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class))),
             }
     )
     @PatchMapping("/profile-image")
-    public String updateProfileImage(
+    public ResponseEntity<Void> updateProfileImage(
             @RequestHeader("accessToken") String accessToken,
             @RequestPart(value = "multipartFile") MultipartFile multipartFile
     ) {
-        return userService.updateProfileImage(jwtTokenProvider.getEmail(accessToken), multipartFile);
+        userService.updateProfileImage(jwtTokenProvider.getEmail(accessToken), multipartFile);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @Operation(summary = "환경설정",

@@ -134,15 +134,13 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public String updateProfileImage(String email, MultipartFile multipartFile) {
+    public void updateProfileImage(String email, MultipartFile multipartFile) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
 
         List<String> fileNames = s3Uploader.uploadFile(List.of(multipartFile));
 
         user.updateProfileImage(fileNames.get(0));
-
-        return fileNames.get(0);
     }
 
     public ConfigurationRes findConfiguration(String email) {
