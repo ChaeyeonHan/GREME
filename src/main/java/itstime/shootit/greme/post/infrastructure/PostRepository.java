@@ -20,13 +20,13 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT p.id,p.image,p.content,p.hashtag,p.status FROM post p " +
             "WHERE date_format(p.created_date, '%Y-%m-%d')=:date AND p.user_id=:userId", nativeQuery = true)
-    Optional<PostRes> findPostByUserAndDate(@Param("userId") Long userId, @Param("date")String date);
+    Optional<PostRes> findPostByUserAndDate(@Param("userId") Long userId, @Param("date") String date);
 
     @Query(value = "SELECT p.id, p.image FROM post p WHERE p.user_id = :userId AND p.status = true ORDER BY p.created_date DESC LIMIT 5;", nativeQuery = true)
     List<GetPostRes> findRecentPostByUserEmail(Long userId);
 
-    @Query(value = "SELECT u.username, p.image, p.content, p.hashtag, p.created_date FROM post p LEFT OUTER JOIN user u on u.id = p.user_id WHERE p.id = :post_id", nativeQuery = true)
-    GetPostSummaryRes findOnePost(Long post_id);
+    @Query(value = "SELECT u.username, p.image, p.content, p.hashtag, p.created_date as createdDate FROM post p LEFT OUTER JOIN user u on u.id = p.user_id WHERE p.id = :post_id", nativeQuery = true)
+    GetPostSummaryRes findOnePost(@Param("post_id") Long post_id);
 
     @Query(value = "SELECT p.image FROM post p WHERE p.id=:post_id", nativeQuery = true)
     Optional<String> findImageById(@Param("post_id") Long post_id);
