@@ -45,16 +45,13 @@ public class PostController {
                     @ApiResponse(responseCode = "404", description = "존재하지 않는 사용자", content = @Content(schema = @Schema(implementation = String.class)))})
     @PostMapping("")
     public Long create(
-            @RequestPart(value = "content") String content,
-            @RequestPart(value = "hashtag") String hashtag,
-            @RequestPart(value = "challenge") Long challenge,
-            @RequestPart(value = "status") Boolean status,
+            @RequestPart(value = "creationReq") CreationReq creationReq,
             @RequestPart(value = "multipartFile") MultipartFile multipartFile,
             @RequestHeader("accessToken") String accessToken
     ) {
         List<String> fileNames = s3Uploader.uploadFile(List.of(multipartFile));
 
-        return postService.create(new CreationReq(content, hashtag, challenge, status), fileNames, jwtTokenProvider.getEmail(accessToken));
+        return postService.create(creationReq, fileNames, jwtTokenProvider.getEmail(accessToken));
     }
 
     @Operation(summary = "날짜로 다이어리 조회",
