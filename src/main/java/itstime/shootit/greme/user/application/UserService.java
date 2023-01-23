@@ -21,10 +21,12 @@ import itstime.shootit.greme.user.infrastructure.InterestRepository;
 import itstime.shootit.greme.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +44,10 @@ public class UserService {
     private final ChallengeService challengeService;
     private final S3Uploader s3Uploader;
 
+    @Value("${PROFILE_URL}")
+    private String PROFILE_URL;
+
+
     public void checkExistsUsername(String username) {
         if (userRepository.existsByUsername(username)) {
             throw new ExistsUsernameException();
@@ -53,6 +59,7 @@ public class UserService {
         try {
             userRepository.save(User.builder()
                     .email(signUpReq.getEmail())
+                    .profileImg(PROFILE_URL)
                     .username(signUpReq.getUsername())
                     .build());
         } catch (Exception e) {
