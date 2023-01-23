@@ -136,7 +136,7 @@ public class PostService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(NotExistUserException::new);
 
-        List<PostInfoQuery> postInfoQueries = postRepository.findAllByUserOrderByIdDesc(user.getId()); //사용자가 쓴 최신 다이어리 조회
+        List<PostInfoQuery> postInfoQueries = postRepository.findAllByUserOrderByCreatedDate(user.getId()); //사용자가 쓴 최신 다이어리 조회
 
         /*
         받아온 사용자 다이어리들을

@@ -7,7 +7,6 @@ import itstime.shootit.greme.post.dto.query.PostInfoQuery;
 import itstime.shootit.greme.post.dto.query.SearchPostInfo;
 import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.response.GetPostRes;
-import itstime.shootit.greme.post.dto.response.PostInfo;
 import itstime.shootit.greme.post.dto.response.PostRes;
 import itstime.shootit.greme.user.domain.User;
 
@@ -34,11 +33,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     void deleteByIdAndUser(Long id, User user);
 
-    @Query(value = "SELECT p.id, p.image, date_format(p.created_date, '%Y-%m') as createdDate FROM post p WHERE p.user_id=:user_id ORDER BY p.id DESC", nativeQuery = true)
-    List<PostInfoQuery> findAllByUserOrderByIdDesc(@Param("user_id") Long user_id);
+    @Query(value = "SELECT p.id, p.image, date_format(p.created_date, '%Y-%m') as createdDate FROM post p WHERE p.user_id=:user_id ORDER BY p.created_date DESC", nativeQuery = true)
+    List<PostInfoQuery> findAllByUserOrderByCreatedDate(@Param("user_id") Long user_id);
 
     List<Post> findAllByUser(User user);
 
-    @Query(value = "SELECT p.id, p.image FROM post p WHERE p.status=:status AND (p.content LIKE %:search% OR p.hashtag LIKE %:search%) ORDER BY p.id DESC", nativeQuery = true)
+    @Query(value = "SELECT p.id, p.image FROM post p WHERE p.status=:status AND (p.content LIKE %:search% OR p.hashtag LIKE %:search%) ORDER BY created_date DESC", nativeQuery = true)
     List<SearchPostInfo> findBySearch(@Param("status") boolean status, @Param("search") String search);
 }
