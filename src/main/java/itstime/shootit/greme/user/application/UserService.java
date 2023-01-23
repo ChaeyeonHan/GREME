@@ -52,7 +52,6 @@ public class UserService {
             userRepository.save(User.builder()
                     .email(signUpReq.getEmail())
                     .username(signUpReq.getUsername())
-                    .activated(true)
                     .build());
         } catch (Exception e) {
             throw new FailSignUpException();
@@ -95,13 +94,19 @@ public class UserService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteUser(String email) {
         try {
-            User user = getUserInfo(email).setActiveFalse();  // activated값 false로
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(NotExistUserException::new);
             postService.deleteAllPosts(user);  // 해당 유저가 작성한 post 모두 삭제
 
             List<Long> allJoinId = challengeUserService.getAllJoinId(user.getId());  // 유저 id로 참여하고 있는 챌린지 id 모두 가져오기
 //            challengeService.numDeleted(allJoinId);  // 해당 유저가 참여하는 챌린지 인원 -1
+            challengeUserService.deleteAllRecords(user.getId());
+
             challengeRepository.numDeleted(allJoinId);  // 쿼리문으로 챌린지 인원 1씩 감소
-            log.info("email : {} 유저가 탈퇴했습니다.", user.getEmail());
+
+            userRepository.delete(user);
+            log.info("{} 유저가 탈퇴했습니다.", user.getEmail());
+
         } catch (Exception ignored) {
             throw new UserAlreadyDeleted();
         }

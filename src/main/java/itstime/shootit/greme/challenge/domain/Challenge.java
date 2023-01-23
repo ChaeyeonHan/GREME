@@ -39,4 +39,8 @@ public class Challenge extends BaseEntity {
         this.num -= 1;
     }
 
+    public void joinChallenge() {
+        this.num += 1;
+    }
+
 }

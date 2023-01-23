@@ -95,7 +95,7 @@ public class UserController {
 
 
     @Operation(summary = "회원 탈퇴하기", parameters = {@Parameter(name = "accessToken", description = "액세스 토큰")})
-    @PatchMapping("")
+    @DeleteMapping("")
     public ResponseEntity<Void> deleteUser(@RequestHeader("accessToken") String accessToken) {
         userService.deleteUser(jwtTokenProvider.getEmail(accessToken));
         return ResponseEntity

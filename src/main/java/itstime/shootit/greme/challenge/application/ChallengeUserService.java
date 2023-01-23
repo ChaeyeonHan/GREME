@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,4 +31,10 @@ public class ChallengeUserService {
         }
         return joinId;
     }
+
+    @Transactional
+    public void deleteAllRecords(Long userId) {
+        challengeUserRepository.deleteAllById(Collections.singleton(userId));
+    }
+
 }

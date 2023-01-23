@@ -45,8 +45,6 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<ChallengeUser> challengeUsers;
 
-    private Boolean activated;
-
     public void updateGender(Integer genderType) {
         switch (genderType) {
             case 0:
@@ -69,13 +67,6 @@ public class User extends BaseEntity {
         this.purpose = purpose;
     }
 
-    public User setActiveFalse() throws Exception {
-        if (this.activated) {
-            throw new Exception();
-        }
-        this.activated = false;
-        return this;
-    }
 
     public void updateUsername(String username) {
         this.username = username;

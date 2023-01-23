@@ -1,5 +1,6 @@
 package itstime.shootit.greme.challenge.application;
 
+import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.challenge.dto.response.*;
 import itstime.shootit.greme.challenge.infrastructure.ChallengePostRepository;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeUserRepository;
@@ -74,6 +75,9 @@ public class ChallengeService {
         if (challengeUserRepository.existsByChallengeIdAndUserId(challengeId, user.getId())) {  // 이미 챌린지 등록되어 있으면
             throw new FailAddChallengeException();
         }
+        Challenge challenge = challengeRepository.findById(challengeId).get();
+        challenge.joinChallenge();  // num 필드 증가
+
         challengeUserRepository.save(ChallengeUser.builder()
                 .challenge(challengeRepository.findById(challengeId).get())
                 .user(user)
