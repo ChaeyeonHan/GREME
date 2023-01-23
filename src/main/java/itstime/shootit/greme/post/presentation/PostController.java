@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import itstime.shootit.greme.aws.application.S3Uploader;
 import itstime.shootit.greme.oauth.application.JwtTokenProvider;
 import itstime.shootit.greme.post.application.PostService;
+import itstime.shootit.greme.post.dto.query.PostInfoQuery;
+import itstime.shootit.greme.post.dto.query.SearchPostInfo;
 import itstime.shootit.greme.post.dto.request.ChangeReq;
 import itstime.shootit.greme.post.dto.request.DeletionReq;
 import itstime.shootit.greme.post.dto.response.AllPostRes;
@@ -136,7 +138,7 @@ public class PostController {
             parameters = {@Parameter(name = "search", description = "검색어"),
                     @Parameter(name = "accessToken", description = "액세스 토큰")})
     @GetMapping("")
-    public List<PostInfo> getPostBySearch(@RequestParam("search") String search, @RequestHeader("accessToken") String accessToken) {
+    public List<SearchPostInfo> getPostBySearch(@RequestParam("search") String search) {
         return postService.findBySearch(search);
     }
 

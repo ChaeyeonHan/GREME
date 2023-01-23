@@ -4,6 +4,7 @@ import itstime.shootit.greme.post.domain.Post;
 
 import itstime.shootit.greme.post.dto.query.PostInfoQuery;
 
+import itstime.shootit.greme.post.dto.query.SearchPostInfo;
 import itstime.shootit.greme.post.dto.response.GetPostSummaryRes;
 import itstime.shootit.greme.post.dto.response.GetPostRes;
 import itstime.shootit.greme.post.dto.response.PostInfo;
@@ -36,8 +37,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT p.id, p.image, date_format(p.created_date, '%Y-%m') as createdDate FROM post p WHERE p.user_id=:user_id ORDER BY p.id DESC", nativeQuery = true)
     List<PostInfoQuery> findAllByUserOrderByIdDesc(@Param("user_id") Long user_id);
 
-    List<PostInfo> findByContentContainingOrHashtagContaining(String content, String hashtag);
-
     List<Post> findAllByUser(User user);
 
+    @Query(value = "SELECT p.id, p.image FROM post p WHERE p.status=:status AND (p.content LIKE %:search% OR p.hashtag LIKE %:search%) ORDER BY p.id DESC", nativeQuery = true)
+    List<SearchPostInfo> findBySearch(@Param("status") boolean status, @Param("search") String search);
 }

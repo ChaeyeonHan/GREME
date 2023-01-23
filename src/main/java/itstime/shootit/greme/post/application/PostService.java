@@ -9,6 +9,7 @@ import itstime.shootit.greme.challenge.domain.Challenge;
 import itstime.shootit.greme.post.domain.Post;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeTitleRes;
 import itstime.shootit.greme.post.dto.query.PostInfoQuery;
+import itstime.shootit.greme.post.dto.query.SearchPostInfo;
 import itstime.shootit.greme.post.dto.request.ChangeReq;
 import itstime.shootit.greme.post.dto.request.DeletionReq;
 import itstime.shootit.greme.post.dto.response.AllPostRes;
@@ -30,7 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -156,8 +156,8 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostInfo> findBySearch(String search) {
-        return postRepository.findByContentContainingOrHashtagContaining(search, search);
+    public List<SearchPostInfo> findBySearch(String search) {
+        return postRepository.findBySearch(true, search);
     }
 
     @Transactional(readOnly = true)
