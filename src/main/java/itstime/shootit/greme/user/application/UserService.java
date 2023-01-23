@@ -5,6 +5,7 @@ import itstime.shootit.greme.challenge.application.ChallengeService;
 import itstime.shootit.greme.challenge.application.ChallengeUserService;
 import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.infrastructure.ChallengeRepository;
+import itstime.shootit.greme.challenge.infrastructure.ChallengeUserRepository;
 import itstime.shootit.greme.post.application.PostService;
 import itstime.shootit.greme.user.domain.Interest;
 import itstime.shootit.greme.user.domain.InterestType;
@@ -37,6 +38,7 @@ public class UserService {
     private final ChallengeRepository challengeRepository;
     private final PostService postService;
     private final ChallengeUserService challengeUserService;
+    private final ChallengeUserRepository challengeUserRepository;
     private final ChallengeService challengeService;
     private final S3Uploader s3Uploader;
 
@@ -98,12 +100,15 @@ public class UserService {
                     .orElseThrow(NotExistUserException::new);
             postService.deleteAllPosts(user);  // 해당 유저가 작성한 post 모두 삭제
 
-            List<Long> allJoinId = challengeUserService.getAllJoinId(user.getId());  // 유저 id로 참여하고 있는 챌린지 id 모두 가져오기
+            if (challengeUserRepository.existsByUserId(user.getId())) {
+                List<Long> allJoinId = challengeUserService.getAllJoinId(user.getId());  // 유저 id로 참여하고 있는 챌린지 id 모두 가져오기
 //            challengeService.numDeleted(allJoinId);  // 해당 유저가 참여하는 챌린지 인원 -1
-            challengeUserService.deleteAllRecords(user.getId());
+                challengeUserService.deleteAllRecords(user.getId());
 
-            challengeRepository.numDeleted(allJoinId);  // 쿼리문으로 챌린지 인원 1씩 감소
+                challengeRepository.numDeleted(allJoinId);  // 쿼리문으로 챌린지 인원 1씩 감소
+            }
 
+            interestRepository.deleteInterestsByUser(user);
             userRepository.delete(user);
             log.info("{} 유저가 탈퇴했습니다.", user.getEmail());
 

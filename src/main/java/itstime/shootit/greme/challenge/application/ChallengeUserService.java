@@ -34,7 +34,7 @@ public class ChallengeUserService {
 
     @Transactional
     public void deleteAllRecords(Long userId) {
-        challengeUserRepository.deleteAllById(Collections.singleton(userId));
+        challengeUserRepository.deleteChallengeUserByUserId(userId);
     }
 
 }

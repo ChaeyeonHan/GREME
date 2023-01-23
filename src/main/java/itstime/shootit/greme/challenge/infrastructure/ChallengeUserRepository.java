@@ -34,4 +34,6 @@ public interface ChallengeUserRepository extends JpaRepository<ChallengeUser, Lo
 
     Boolean existsByUserId(Long user_id);
 
+    void deleteChallengeUserByUserId(Long user_id);
+
 }
