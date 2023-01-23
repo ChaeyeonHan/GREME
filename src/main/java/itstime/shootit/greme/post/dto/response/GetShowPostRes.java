@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetShowPostRes {
+    @Schema(description = "유저 고유 번호")
+    private Long userId;
 
     @Schema(description = "해당 다이어리 작성자 이름")
     private String username;

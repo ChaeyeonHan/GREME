@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.sql.Timestamp;
 
 public interface GetPostSummaryRes {
+    Long getUserId();
+
     @Schema(description = "해당 다이어리 작성자 이름")
     String getUsername();
 

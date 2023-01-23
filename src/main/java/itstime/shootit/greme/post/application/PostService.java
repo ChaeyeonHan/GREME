@@ -85,6 +85,7 @@ public class PostService {
         GetPostSummaryRes getPost = postRepository.findOnePost(post_id);
 
         return GetShowPostRes.builder()
+                .userId(getPost.getUserId())
                 .username(getPost.getUsername())
                 .image(getPost.getImage())
                 .content(getPost.getContent())
