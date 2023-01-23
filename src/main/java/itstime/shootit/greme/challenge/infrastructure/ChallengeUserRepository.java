@@ -5,6 +5,7 @@ import itstime.shootit.greme.challenge.dto.response.GetChallengeSummaryRes;
 import itstime.shootit.greme.challenge.dto.ChallengeTitle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -27,9 +28,9 @@ public interface ChallengeUserRepository extends JpaRepository<ChallengeUser, Lo
     List<ChallengeUser> findAllByUserId(Long userId);
     boolean existsByChallengeIdAndUserId(Long challengeId, Long userId);  // 참여하는 챌린지인지
 
-    @Query(value = "SELECT c.id, c.title FROM challenge c LEFT OUTER JOIN challenge_user cu on c.c_id = cu.challenge_id " +
+    @Query(value = "SELECT c.id, c.title FROM challenge c LEFT OUTER JOIN challenge_user cu on c.id = cu.challenge_id " +
             "WHERE cu.user_id = :userId ORDER BY c.deadline DESC;", nativeQuery = true)
-    List<ChallengeTitle> findJoinChallengeTitle(Long userId);
+    List<ChallengeTitle> findJoinChallengeTitle(@Param("userId")Long userId);
 
     Boolean existsByUserId(Long user_id);
 
