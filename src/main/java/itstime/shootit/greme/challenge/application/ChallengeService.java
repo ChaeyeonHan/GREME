@@ -107,7 +107,7 @@ public class ChallengeService {
         List<GetPostRes> postRes = postRepository.findRecentPostByUserEmail(user_id);  // 가장 최근에 작성된 post 6개
 
         return GetProfileRes.builder()
-                .profileImg(user.getProfileImg())
+                .profileImg(user1.getProfileImg())
                 .username(user1.getUsername())
                 .challengeSummary(getChallengeSummaryRes)
                 .postRes(postRes).build();
