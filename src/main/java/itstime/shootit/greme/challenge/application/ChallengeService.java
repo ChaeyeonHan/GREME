@@ -124,7 +124,7 @@ public class ChallengeService {
                 .orElseThrow(NotExistUserException::new);
 
         boolean status = challengeUserRepository.existsByChallengeIdAndUserId(challenge_id, user.getId());  // 해당 챌린지에 참여하는지
-        List<GetChallengeListRes> challengeList = challengePostRepository.findAllImageByChallengeId(challenge_id);  // 챌린지 참여 목록
+        List<GetChallengeListRes> challengeList = postRepository.findAllImageByChallengeId(challenge_id);  // 챌린지 참여 목록
 
         GetChallengeSummaryRes challengeSummary = challengeRepository.findById(challenge_id, GetChallengeSummaryRes.class); // 해당 챌린지 정보
 
@@ -178,7 +178,7 @@ public class ChallengeService {
         }
 
         boolean status = challengeUserRepository.existsByChallengeIdAndUserId(challengeId, user.getId());  // 해당 챌린지에 참여하는지
-        List<GetChallengeListRes> challengeList = challengePostRepository.findAllImageByChallengeId(challengeId);  // 챌린지 참여 목록
+        List<GetChallengeListRes> challengeList = postRepository.findAllImageByChallengeId(challengeId);  // 챌린지 참여 목록
 
         GetChallengeSummaryRes challengeSummary = challengeRepository.findById(challengeId, GetChallengeSummaryRes.class); // 해당 챌린지 정보
 

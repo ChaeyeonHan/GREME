@@ -1,5 +1,6 @@
 package itstime.shootit.greme.post.infrastructure;
 
+import itstime.shootit.greme.challenge.dto.response.GetChallengeListRes;
 import itstime.shootit.greme.post.domain.Post;
 
 import itstime.shootit.greme.post.dto.query.PostInfoQuery;
@@ -41,4 +42,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(value = "SELECT p.id, p.image FROM post p WHERE p.status=:status AND (p.content LIKE %:search% OR p.hashtag LIKE %:search%) ORDER BY p.id DESC", nativeQuery = true)
     List<SearchPostInfo> findBySearch(@Param("status") boolean status, @Param("search") String search);
+
+    @Query(value = "SELECT p.id, p.image from post p INNER JOIN challenge_post cp ON p.id = cp.post_id WHERE cp.challenge_id = :challenge_id AND p.status = true", nativeQuery = true)
+    List<GetChallengeListRes> findAllImageByChallengeId(@Param("challenge_id") Long challenge_id);
+
 }
