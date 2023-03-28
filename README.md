@@ -9,10 +9,9 @@
 
 ## ✨ Technology Stack
 
-<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=plastic-square&logo=Spring Boot&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=plastic-square&logo=Spring Security&logoColor=white"/>
-<img src="https://img.shields.io/badge/MySQL-4479A1?style=plastic-square&logo=MySQL&logoColor=white"/> <img src="https://img.shields.io/badge/Gradle-02303A?style=plastic-square&logo=Gradle&logoColor=white"/> <br>
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=plastic-square&logo=Spring Boot&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=plastic-square&logo=Spring Security&logoColor=white"/> <img src="https://img.shields.io/badge/-JAVA%2011-%23007396">
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=plastic-square&logo=MySQL&logoColor=white"/> <img src="https://img.shields.io/badge/Gradle-02303A?style=plastic-square&logo=Gradle&logoColor=white"/><br>
 <img src="https://img.shields.io/badge/Amazon RDS-527FFF?style=plastic-square&logo=Amazon RDS&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=plastic-square&logo=Amazon EC2&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=plastic-square&logo=Amazon S3&logoColor=white"/>
-
 <img src="https://img.shields.io/badge/Github Actions-2088FF?style=plastic-square&logo=Github Actions&logoColor=white"/>  <img src="https://img.shields.io/badge/Swagger-85EA2D?style=plastic-square&logo=Swagger&logoColor=white"/>
 
 <br>
